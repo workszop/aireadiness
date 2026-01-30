@@ -200,10 +200,11 @@
         }
         .section-indicator {
             flex: 1;
-            min-width: 120px;
-            padding: 16px 12px;
+            min-width: 100px;
+            max-width: 150px;
+            padding: 12px 8px;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             background: var(--white);
             color: var(--text-muted);
             border: none;
@@ -211,7 +212,10 @@
             cursor: pointer;
             font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .section-indicator:hover {
             background: var(--gray-50);
@@ -343,9 +347,22 @@
                 gap: 1px;
             }
             .section-indicator {
-                min-width: 80px;
-                padding: 12px 8px;
-                font-size: 0.625rem;
+                min-width: 60px;
+                max-width: 100px;
+                padding: 10px 6px;
+                font-size: 0.55rem;
+            }
+            .top-menu {
+                left: 10px;
+                top: 10px;
+            }
+            .language-switcher {
+                right: 10px;
+                top: 10px;
+            }
+            .menu-btn {
+                padding: 6px 10px;
+                font-size: 0.65rem;
             }
             .results-grid {
                 grid-template-columns: 1fr;
@@ -370,6 +387,48 @@
             gap: 0;
             background: var(--white);
             border: 1px solid var(--gray-200);
+        }
+
+        /* Top Menu */
+        .top-menu {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+        }
+
+        .menu-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .menu-btn:hover {
+            background: var(--gray-50);
+            color: var(--text-primary);
+        }
+
+        .menu-btn.active {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .menu-btn:not(:last-child) {
+            border-right: 1px solid var(--gray-200);
         }
 
         .lang-btn {
@@ -421,6 +480,22 @@
     </style>
 </head>
 <body>
+    <!-- Top Menu -->
+    <div class="top-menu" id="top-menu">
+        <button class="menu-btn" id="menu-home" onclick="survey.goHome()">
+            <i data-lucide="home" style="width: 14px; height: 14px;"></i>
+            <span class="menu-label" data-key="menuHome">Home</span>
+        </button>
+        <button class="menu-btn" id="menu-restart" onclick="survey.confirmRestart()">
+            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+            <span class="menu-label" data-key="menuRestart">Restart</span>
+        </button>
+        <button class="menu-btn" id="menu-status" onclick="survey.showStatus()">
+            <i data-lucide="bar-chart" style="width: 14px; height: 14px;"></i>
+            <span class="menu-label" data-key="menuStatus">Status</span>
+        </button>
+    </div>
+
     <!-- Language Switcher -->
     <div class="language-switcher">
         <button class="lang-btn active" id="lang-pl" onclick="survey.setLanguage('pl')">PL</button>
@@ -518,7 +593,19 @@
                 statQuestions: 'Pytania',
                 statCategories: 'Kategorie',
                 statMinutes: 'Minut',
-                statFormats: 'Formaty'
+                statFormats: 'Formaty',
+
+                // Menu
+                menuHome: 'Start',
+                menuRestart: 'Od nowa',
+                menuStatus: 'Status',
+                statusTitle: 'Aktualny Status',
+                statusSubtitle: 'Postęp w poszczególnych kategoriach',
+                notStarted: 'Nie rozpoczęto',
+                inProgress: 'W trakcie',
+                categoryCompleted: 'Ukończono',
+                continueAssessment: 'Kontynuuj',
+                startAssessment: 'Rozpocznij'
             },
             en: {
                 // Score labels
@@ -602,7 +689,19 @@
                 statQuestions: 'Questions',
                 statCategories: 'Categories',
                 statMinutes: 'Minutes',
-                statFormats: 'Formats'
+                statFormats: 'Formats',
+
+                // Menu
+                menuHome: 'Home',
+                menuRestart: 'Restart',
+                menuStatus: 'Status',
+                statusTitle: 'Current Status',
+                statusSubtitle: 'Progress in each category',
+                notStarted: 'Not started',
+                inProgress: 'In progress',
+                categoryCompleted: 'Completed',
+                continueAssessment: 'Continue',
+                startAssessment: 'Start'
             }
         };
 
@@ -616,8 +715,9 @@
                 this.showResults = false;
                 this.showWelcome = true;
                 this.showReview = false;
+                this.showStatusView = false;
                 this.currentQuestionIndex = 0;
-                this.oneQuestionMode = false;
+                this.oneQuestionMode = true; // Always use one question mode
                 this.hasSavedData = false;
                 this.language = localStorage.getItem('aiready_language') || 'pl';
                 this.checkForSavedData();
@@ -953,9 +1053,10 @@
                 this.render();
             }
 
-            startSurvey(oneQuestionMode = false) {
+            startSurvey(oneQuestionMode = true) {
                 this.showWelcome = false;
-                this.oneQuestionMode = oneQuestionMode;
+                this.showStatusView = false;
+                this.oneQuestionMode = true; // Always one question at a time
                 this.render();
             }
 
@@ -965,10 +1066,123 @@
                 this.showResults = false;
                 this.showWelcome = true;
                 this.showReview = false;
+                this.showStatusView = false;
                 this.currentSection = Object.keys(this.questions)[0];
                 this.currentQuestionIndex = 0;
                 this.hasSavedData = false;
                 this.clearLocalStorage();
+                this.render();
+            }
+
+            // Menu methods
+            goHome() {
+                this.showWelcome = true;
+                this.showResults = false;
+                this.showReview = false;
+                this.showStatusView = false;
+                this.checkForSavedData();
+                this.render();
+            }
+
+            confirmRestart() {
+                if (Object.keys(this.answers).length > 0) {
+                    if (confirm(this.language === 'pl' ?
+                        'Czy na pewno chcesz rozpocząć od nowa? Wszystkie odpowiedzi zostaną utracone.' :
+                        'Are you sure you want to restart? All answers will be lost.')) {
+                        this.reset();
+                    }
+                } else {
+                    this.reset();
+                }
+            }
+
+            showStatus() {
+                this.showStatusView = true;
+                this.showWelcome = false;
+                this.showResults = false;
+                this.showReview = false;
+                this.render();
+            }
+
+            getSectionProgress(section) {
+                const sectionData = this.questions[section];
+                const answered = sectionData.filter(q => this.answers[q.id] !== undefined).length;
+                return {
+                    answered,
+                    total: sectionData.length,
+                    percentage: (answered / sectionData.length) * 100,
+                    isCompleted: answered === sectionData.length
+                };
+            }
+
+            renderStatus() {
+                const sections = Object.keys(this.questions);
+                const totalAnswered = Object.keys(this.answers).length;
+                const totalQuestions = this.getTotalQuestions();
+
+                return `
+                    <h1 class="title">${this.t('statusTitle')}</h1>
+                    <p class="subtitle">${this.t('statusSubtitle')}</p>
+
+                    <div class="progress" style="margin-bottom: 0.5rem;">
+                        <div class="progress-bar" style="width: ${(totalAnswered / totalQuestions) * 100}%"></div>
+                    </div>
+                    <div style="text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2rem;">
+                        ${totalAnswered}/${totalQuestions} ${this.t('questionsAnswered')} • ${Math.round((totalAnswered / totalQuestions) * 100)}% ${this.t('completed')}
+                    </div>
+
+                    <div class="results-grid">
+                        ${sections.map(section => {
+                            const progress = this.getSectionProgress(section);
+                            const score = progress.isCompleted ? this.calculateScore(section) : null;
+                            return `
+                                <div class="result-card" style="cursor: pointer;" onclick="survey.goToSection('${section}')">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <span style="font-weight: 600; font-size: 0.875rem;">${section}</span>
+                                        ${progress.isCompleted ? `
+                                            <span style="font-weight: 800; font-size: 1.25rem;">${Math.round(score)}%</span>
+                                        ` : `
+                                            <span style="font-size: 0.75rem; color: var(--text-muted);">
+                                                ${progress.answered}/${progress.total}
+                                            </span>
+                                        `}
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" style="width: ${progress.percentage}%;"></div>
+                                    </div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        ${progress.isCompleted ?
+                                            `<i data-lucide="check-circle" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('categoryCompleted')}` :
+                                            progress.answered > 0 ?
+                                                `<i data-lucide="clock" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('inProgress')}` :
+                                                `<i data-lucide="circle" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('notStarted')}`
+                                        }
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div class="button-group">
+                        ${totalAnswered > 0 ? `
+                            <button class="button" onclick="survey.continueSurveyFromStatus()">
+                                <i data-lucide="play" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
+                                ${this.t('continueAssessment')}
+                            </button>
+                        ` : `
+                            <button class="button" onclick="survey.startSurvey(true)">
+                                <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
+                                ${this.t('startAssessment')}
+                            </button>
+                        `}
+                    </div>
+                `;
+            }
+
+            continueSurveyFromStatus() {
+                this.showStatusView = false;
+                this.showWelcome = false;
+                this.oneQuestionMode = true;
                 this.render();
             }
 
@@ -1057,14 +1271,10 @@
                             ${this.t('welcomeText')}
                         </p>
 
-                        <div class="button-group">
-                            <button class="button" onclick="survey.startSurvey(true)">
+                        <div class="button-group" style="justify-content: center;">
+                            <button class="button" style="max-width: 300px;" onclick="survey.startSurvey(true)">
                                 <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('oneByOne')}
-                            </button>
-                            <button class="button secondary" onclick="survey.startSurvey(false)">
-                                <i data-lucide="list" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('allQuestions')}
+                                ${this.t('startAssessment')}
                             </button>
                         </div>
 
@@ -1358,6 +1568,8 @@
             render() {
                 if (this.showWelcome) {
                     this.app.innerHTML = this.renderWelcome();
+                } else if (this.showStatusView) {
+                    this.app.innerHTML = this.renderStatus();
                 } else if (this.showReview) {
                     this.app.innerHTML = this.renderReview();
                 } else if (this.showResults) {
@@ -1369,6 +1581,18 @@
                 if (typeof lucide !== 'undefined') {
                     lucide.createIcons();
                 }
+                // Update menu labels
+                this.updateMenuLabels();
+            }
+
+            updateMenuLabels() {
+                const labels = document.querySelectorAll('.menu-label');
+                labels.forEach(label => {
+                    const key = label.getAttribute('data-key');
+                    if (key) {
+                        label.textContent = this.t(key);
+                    }
+                });
             }
         }
 
