@@ -1,0 +1,43 @@
+#Organizational Maturity
+Is there a formal AI development strategy in the organization?|Yes|In progress|No
+How do you assess the board's awareness of AI capabilities and limitations?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there risk management processes related to AI?|Yes|Being implemented|No
+How do you assess the culture of innovation in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there mechanisms to evaluate the success of AI projects?|Yes|In development|No
+Does the organization have policies and procedures ensuring compliance with AI-related legal regulations?|Yes|In progress|No
+
+#Data
+Does the organization have a data management strategy?|Yes|In development|No
+How do you assess the quality of data in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there data validation and cleaning processes?|Yes, comprehensive|Partial|No
+Is the data properly labeled and categorized?|Yes|Partially|No
+How do you assess the availability of data needed for training AI models?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the organization comply with data protection regulations in the context of AI?|Yes|Partially|No
+
+#Technical Infrastructure
+Do the available computing resources and data storage (local or cloud) meet the requirements for training and running AI models?|Yes, fully|Partially|No
+Does the organization have a dedicated environment (local or cloud) for experimenting/testing new technological solutions (e.g., analytics, automation, AI)?|Yes|In progress|No
+Does the organization have tools for monitoring and managing the performance of environments (local and cloud), including service observability, costs, and availability?|Yes|Being implemented|No
+How do you assess the flexibility and scalability of the current infrastructure for load fluctuations and rapid deployment of new services?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the infrastructure (regardless of processing location) meet security and compliance requirements (e.g., GDPR, access control, encryption, audit logs) with the possibility of applying them to new solutions, including AI (e.g., AI Act requirements)?|Yes|Partially|No
+
+#Team and Skills
+Does the organization have a dedicated team for AI projects?|Yes|Being formed|No
+How do you assess the team's level of competence in AI?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Is there a competence development plan for AI?|Yes|In progress|No
+Does the team have experience in implementing AI projects?|Significant experience|Medium experience|Little experience|No experience
+How do you assess the collaboration between technical and business teams?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+
+#Business Processes
+Have business processes been identified for optimization through AI?|Yes, comprehensively|Partially|No
+How do you assess the readiness of processes for automation?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there procedures for implementing AI solutions?|Yes|In progress|No
+How do you assess the integration of AI with existing business processes?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are processes properly documented?|Yes, comprehensively|Partially|No
+
+#Financing
+Is there a dedicated budget for AI projects?|Yes|Being planned|No
+How do you assess the level of investment in AI development?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Is there a process for evaluating return on investment in AI?|Yes|In development|No
+How do you assess the availability of funds for AI training?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the organization have a plan for long-term AI development financing?|Yes|In progress|No
