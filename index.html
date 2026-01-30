@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -369,6 +369,42 @@
             font-size: 0.875rem;
         }
 
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 4px;
+            background: var(--bg-white);
+            padding: 4px;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .lang-btn {
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--text-dark);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
         .help-text {
             font-size: 0.875rem;
             color: var(--text-light);
@@ -412,6 +448,12 @@
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="lang-btn active" id="lang-pl" onclick="survey.setLanguage('pl')">PL</button>
+        <button class="lang-btn" id="lang-en" onclick="survey.setLanguage('en')">EN</button>
+    </div>
+
     <!-- Scroll Progress Indicator -->
     <div class="scroll-indicator">
         <div class="scroll-progress" id="scrollProgress"></div>
@@ -420,6 +462,165 @@
     <div id="app" class="card"></div>
     
     <script>
+        const translations = {
+            pl: {
+                // Score labels
+                highReadiness: 'Wysoka gotowość',
+                goodReadiness: 'Dobra gotowość',
+                mediumReadiness: 'Średnia gotowość',
+                lowReadiness: 'Niska gotowość',
+                veryLowReadiness: 'Bardzo niska gotowość',
+
+                // Welcome screen
+                title: 'Ocena Gotowości AI',
+                welcomeText: 'Witamy w narzędziu do oceny gotowości Twojej organizacji do wdrożenia sztucznej inteligencji. To badanie pomoże Ci zidentyfikować mocne strony oraz obszary wymagające rozwoju.',
+                questionsInCategories: 'pytań w',
+                categories: 'kategoriach',
+                estimatedTime: 'Szacowany czas:',
+                minutes: 'minut',
+                autoSave: 'Automatyczny zapis postępu',
+                detailedReport: 'Szczegółowy raport z rekomendacjami',
+                exportResults: 'Eksport wyników (CSV, JSON)',
+                oneByOne: 'Pytanie po pytaniu',
+                allQuestions: 'Wszystkie pytania',
+                helpTip: 'Wskazówka:',
+                helpText: 'Tryb "Pytanie po pytaniu" pozwala skupić się na jednym pytaniu naraz. Użyj strzałek lub klawiszy 1-5 do nawigacji.',
+
+                // Saved data
+                savedSurveyFound: 'Znaleziono zapisaną ankietę z',
+                answersCount: 'odpowiedziami.',
+                continueOrRestart: 'Czy chcesz kontynuować czy zacząć od nowa?',
+                continueSurvey: 'Kontynuuj ankietę',
+                startFresh: 'Zacznij od nowa',
+
+                // Navigation
+                part: 'Część',
+                question: 'Pytanie',
+                of: 'z',
+                questionsAnswered: 'pytań',
+                completed: 'ukończono',
+                previous: '← Poprzednie',
+                next: 'Następne →',
+                previousSection: '← Poprzednia sekcja',
+                nextSection: 'Następna sekcja →',
+                navigation: 'Nawigacja:',
+                quickSelect: 'do szybkiego wyboru',
+
+                // Review
+                reviewTitle: 'Przegląd odpowiedzi',
+                reviewSubtitle: 'Sprawdź swoje odpowiedzi przed wyświetleniem wyników.',
+                backToSurvey: 'Wróć do ankiety',
+                showResults: 'Pokaż wyniki',
+                reviewAnswers: 'Przejrzyj odpowiedzi',
+                results: 'Wyniki',
+
+                // Results
+                resultsTitle: 'Wyniki Oceny Gotowości AI',
+                detailedResults: 'Wyniki szczegółowe',
+                recommendations: 'Rekomendacje',
+                startAgain: 'Rozpocznij ponownie',
+
+                // CSV headers
+                csvSection: 'Sekcja',
+                csvQuestion: 'Pytanie',
+                csvAnswer: 'Odpowiedź',
+                csvScore: 'Wynik',
+                csvSummary: 'Podsumowanie wyników',
+                csvSectionScore: 'Wynik %',
+                csvOverall: 'Wynik ogólny',
+
+                // Recommendations
+                recExcellent: 'Doskonała gotowość w obszarze',
+                recExcellentText: 'Kontynuuj dobre praktyki i dziel się swoim doświadczeniem.',
+                recGood: 'Dobra gotowość w obszarze',
+                recGoodText: 'Zidentyfikuj obszary do poprawy i stwórz plan działania.',
+                recMedium: 'Średnia gotowość w obszarze',
+                recMediumText: 'Zalecane są inwestycje w szkolenia i infrastrukturę.',
+                recLow: 'Niska gotowość w obszarze',
+                recLowText: 'Wymaga natychmiastowej uwagi i zasobów.',
+
+                questionsFile: 'questions.txt'
+            },
+            en: {
+                // Score labels
+                highReadiness: 'High readiness',
+                goodReadiness: 'Good readiness',
+                mediumReadiness: 'Medium readiness',
+                lowReadiness: 'Low readiness',
+                veryLowReadiness: 'Very low readiness',
+
+                // Welcome screen
+                title: 'AI Readiness Assessment',
+                welcomeText: 'Welcome to the tool for assessing your organization\'s readiness for artificial intelligence implementation. This survey will help you identify strengths and areas requiring development.',
+                questionsInCategories: 'questions in',
+                categories: 'categories',
+                estimatedTime: 'Estimated time:',
+                minutes: 'minutes',
+                autoSave: 'Automatic progress saving',
+                detailedReport: 'Detailed report with recommendations',
+                exportResults: 'Export results (CSV, JSON)',
+                oneByOne: 'One question at a time',
+                allQuestions: 'All questions',
+                helpTip: 'Tip:',
+                helpText: '"One question at a time" mode allows you to focus on one question. Use arrows or keys 1-5 to navigate.',
+
+                // Saved data
+                savedSurveyFound: 'Found saved survey with',
+                answersCount: 'answers.',
+                continueOrRestart: 'Do you want to continue or start fresh?',
+                continueSurvey: 'Continue survey',
+                startFresh: 'Start fresh',
+
+                // Navigation
+                part: 'Part',
+                question: 'Question',
+                of: 'of',
+                questionsAnswered: 'questions',
+                completed: 'completed',
+                previous: '← Previous',
+                next: 'Next →',
+                previousSection: '← Previous section',
+                nextSection: 'Next section →',
+                navigation: 'Navigation:',
+                quickSelect: 'for quick selection',
+
+                // Review
+                reviewTitle: 'Review Answers',
+                reviewSubtitle: 'Check your answers before viewing results.',
+                backToSurvey: 'Back to survey',
+                showResults: 'Show results',
+                reviewAnswers: 'Review answers',
+                results: 'Results',
+
+                // Results
+                resultsTitle: 'AI Readiness Assessment Results',
+                detailedResults: 'Detailed results',
+                recommendations: 'Recommendations',
+                startAgain: 'Start again',
+
+                // CSV headers
+                csvSection: 'Section',
+                csvQuestion: 'Question',
+                csvAnswer: 'Answer',
+                csvScore: 'Score',
+                csvSummary: 'Results summary',
+                csvSectionScore: 'Score %',
+                csvOverall: 'Overall score',
+
+                // Recommendations
+                recExcellent: 'Excellent readiness in area',
+                recExcellentText: 'Continue good practices and share your experience.',
+                recGood: 'Good readiness in area',
+                recGoodText: 'Identify areas for improvement and create an action plan.',
+                recMedium: 'Medium readiness in area',
+                recMediumText: 'Investments in training and infrastructure are recommended.',
+                recLow: 'Low readiness in area',
+                recLowText: 'Requires immediate attention and resources.',
+
+                questionsFile: 'questions_en.txt'
+            }
+        };
+
         class Survey {
             constructor() {
                 this.app = document.getElementById('app');
@@ -433,7 +634,39 @@
                 this.currentQuestionIndex = 0;
                 this.oneQuestionMode = false;
                 this.hasSavedData = false;
+                this.language = localStorage.getItem('aiready_language') || 'pl';
                 this.checkForSavedData();
+            }
+
+            t(key) {
+                return translations[this.language][key] || key;
+            }
+
+            setLanguage(lang) {
+                this.language = lang;
+                localStorage.setItem('aiready_language', lang);
+                document.getElementById('html-root').lang = lang;
+
+                // Update language button states
+                document.getElementById('lang-pl').classList.toggle('active', lang === 'pl');
+                document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+
+                // Reload questions for the new language
+                this.reloadQuestions();
+            }
+
+            async reloadQuestions() {
+                try {
+                    const response = await fetch(this.t('questionsFile'));
+                    const text = await response.text();
+                    this.questions = this.parseQuestions(text);
+                    if (!this.currentSection || !this.questions[this.currentSection]) {
+                        this.currentSection = Object.keys(this.questions)[0];
+                    }
+                    this.render();
+                } catch (error) {
+                    console.error('Error loading questions:', error);
+                }
             }
 
             checkForSavedData() {
@@ -472,7 +705,12 @@
 
             async initialize() {
                 try {
-                    const response = await fetch('questions.txt');
+                    // Set initial language button state
+                    document.getElementById('lang-pl').classList.toggle('active', this.language === 'pl');
+                    document.getElementById('lang-en').classList.toggle('active', this.language === 'en');
+                    document.getElementById('html-root').lang = this.language;
+
+                    const response = await fetch(this.t('questionsFile'));
                     const text = await response.text();
                     this.questions = this.parseQuestions(text);
                     if (!this.currentSection) {
@@ -594,11 +832,11 @@
             }
 
             getScoreLabel(score) {
-                if (score >= 80) return 'Wysoka gotowość';
-                if (score >= 60) return 'Dobra gotowość';
-                if (score >= 40) return 'Średnia gotowość';
-                if (score >= 20) return 'Niska gotowość';
-                return 'Bardzo niska gotowość';
+                if (score >= 80) return this.t('highReadiness');
+                if (score >= 60) return this.t('goodReadiness');
+                if (score >= 40) return this.t('mediumReadiness');
+                if (score >= 20) return this.t('lowReadiness');
+                return this.t('veryLowReadiness');
             }
 
             calculateScore(section) {
@@ -637,22 +875,22 @@
                 if (score >= 80) {
                     recommendations.push({
                         type: 'success',
-                        text: `Doskonała gotowość w obszarze "${section}". Kontynuuj dobre praktyki i dziel się swoim doświadczeniem.`
+                        text: `${this.t('recExcellent')} "${section}". ${this.t('recExcellentText')}`
                     });
                 } else if (score >= 60) {
                     recommendations.push({
                         type: 'info',
-                        text: `Dobra gotowość w obszarze "${section}". Zidentyfikuj obszary do poprawy i stwórz plan działania.`
+                        text: `${this.t('recGood')} "${section}". ${this.t('recGoodText')}`
                     });
                 } else if (score >= 40) {
                     recommendations.push({
                         type: 'warning',
-                        text: `Średnia gotowość w obszarze "${section}". Zalecane są inwestycje w szkolenia i infrastrukturę.`
+                        text: `${this.t('recMedium')} "${section}". ${this.t('recMediumText')}`
                     });
                 } else {
                     recommendations.push({
                         type: 'danger',
-                        text: `Niska gotowość w obszarze "${section}". Wymaga natychmiastowej uwagi i zasobów.`
+                        text: `${this.t('recLow')} "${section}". ${this.t('recLowText')}`
                     });
                 }
 
@@ -672,7 +910,7 @@
 
                             return `
                                 <div class="${classes.join(' ')}" onclick="survey.goToSection('${section}')">
-                                    <div style="font-size: 0.75rem; opacity: 0.8;">Część ${index + 1}</div>
+                                    <div style="font-size: 0.75rem; opacity: 0.8;">${this.t('part')} ${index + 1}</div>
                                     <div>${section}</div>
                                 </div>
                             `;
@@ -773,14 +1011,14 @@
             }
 
             downloadCSV() {
-                let csv = 'Sekcja,Pytanie,Odpowiedź,Wynik\n';
+                let csv = `${this.t('csvSection')},${this.t('csvQuestion')},${this.t('csvAnswer')},${this.t('csvScore')}\n`;
 
                 Object.values(this.answerDetails).forEach(detail => {
                     csv += `"${detail.section}","${detail.question}","${detail.answer}",${detail.score}\n`;
                 });
 
-                csv += '\n\nPodsumowanie wyników\n';
-                csv += 'Sekcja,Wynik %\n';
+                csv += `\n\n${this.t('csvSummary')}\n`;
+                csv += `${this.t('csvSection')},${this.t('csvSectionScore')}\n`;
                 Object.keys(this.questions).forEach(section => {
                     const score = this.calculateScore(section);
                     csv += `"${section}",${Math.round(score)}\n`;
@@ -788,7 +1026,7 @@
 
                 const overallScore = Object.keys(this.questions)
                     .reduce((sum, sec) => sum + this.calculateScore(sec), 0) / Object.keys(this.questions).length;
-                csv += `\n"Wynik ogólny",${Math.round(overallScore)}\n`;
+                csv += `\n"${this.t('csvOverall')}",${Math.round(overallScore)}\n`;
 
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const url = URL.createObjectURL(blob);
@@ -812,19 +1050,19 @@
                                     <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.8 24.8 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
                                     <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
                                 </svg>
-                                Ocena Gotowości AI
+                                ${this.t('title')}
                             </h1>
                             <p class="subtitle">
-                                Znaleziono zapisaną ankietę z ${savedAnswersCount} odpowiedziami.
-                                Czy chcesz kontynuować czy zacząć od nowa?
+                                ${this.t('savedSurveyFound')} ${savedAnswersCount} ${this.t('answersCount')}
+                                ${this.t('continueOrRestart')}
                             </p>
 
                             <div class="button-group">
                                 <button class="button" onclick="survey.continueSurvey()">
-                                    📥 Kontynuuj ankietę
+                                    ${this.t('continueSurvey')}
                                 </button>
                                 <button class="button secondary" onclick="survey.startFresh()">
-                                    🔄 Zacznij od nowa
+                                    ${this.t('startFresh')}
                                 </button>
                             </div>
                         </div>
@@ -838,48 +1076,46 @@
                                 <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.8 24.8 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
                                 <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
                             </svg>
-                            Ocena Gotowości AI
+                            ${this.t('title')}
                         </h1>
                         <p class="subtitle">
-                            Witamy w narzędziu do oceny gotowości Twojej organizacji do wdrożenia sztucznej inteligencji.
-                            To badanie pomoże Ci zidentyfikować mocne strony oraz obszary wymagające rozwoju.
+                            ${this.t('welcomeText')}
                         </p>
 
                         <div class="feature-list">
                             <div class="feature-item">
                                 <div class="feature-icon">✓</div>
-                                <div>${totalQuestions} pytań w ${Object.keys(this.questions).length} kategoriach</div>
+                                <div>${totalQuestions} ${this.t('questionsInCategories')} ${Object.keys(this.questions).length} ${this.t('categories')}</div>
                             </div>
                             <div class="feature-item">
                                 <div class="feature-icon">⏱</div>
-                                <div>Szacowany czas: ~${estimatedTime} minut</div>
+                                <div>${this.t('estimatedTime')} ~${estimatedTime} ${this.t('minutes')}</div>
                             </div>
                             <div class="feature-item">
                                 <div class="feature-icon">💾</div>
-                                <div>Automatyczny zapis postępu</div>
+                                <div>${this.t('autoSave')}</div>
                             </div>
                             <div class="feature-item">
                                 <div class="feature-icon">📊</div>
-                                <div>Szczegółowy raport z rekomendacjami</div>
+                                <div>${this.t('detailedReport')}</div>
                             </div>
                             <div class="feature-item">
                                 <div class="feature-icon">⬇</div>
-                                <div>Eksport wyników (CSV, JSON)</div>
+                                <div>${this.t('exportResults')}</div>
                             </div>
                         </div>
 
                         <div class="button-group">
                             <button class="button" onclick="survey.startSurvey(true)">
-                                Pytanie po pytaniu
+                                ${this.t('oneByOne')}
                             </button>
                             <button class="button secondary" onclick="survey.startSurvey(false)">
-                                Wszystkie pytania
+                                ${this.t('allQuestions')}
                             </button>
                         </div>
 
                         <div class="help-text">
-                            <strong>Wskazówka:</strong> Tryb "Pytanie po pytaniu" pozwala skupić się na jednym pytaniu naraz.
-                            Użyj strzałek lub klawiszy 1-5 do nawigacji.
+                            <strong>${this.t('helpTip')}</strong> ${this.t('helpText')}
                         </div>
                     </div>
                 `;
@@ -894,9 +1130,9 @@
                             <path d="M4 1.5A1.5 1.5 0 0 1 5.5 0h5A1.5 1.5 0 0 1 12 1.5V2h1.5A1.5 1.5 0 0 1 15 3.5v11A1.5 1.5 0 0 1 13.5 16h-11A1.5 1.5 0 0 1 1 14.5v-11A1.5 1.5 0 0 1 2.5 2H4zm1 0a.5.5 0 0 0-.5.5V2h7v-.5a.5.5 0 0 0-.5-.5z"/>
                             <path d="M10.97 7.03a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 0 1-1.06 0l-1.5-1.5a.75.75 0 1 1 1.06-1.06L7.5 9.94l2.44-2.91a.75.75 0 0 1 1.03 0"/>
                         </svg>
-                        Przegląd odpowiedzi
+                        ${this.t('reviewTitle')}
                     </h2>
-                    <p class="subtitle">Sprawdź swoje odpowiedzi przed wyświetleniem wyników.</p>
+                    <p class="subtitle">${this.t('reviewSubtitle')}</p>
 
                     ${sections.map(section => {
                         const sectionQuestions = this.questions[section];
@@ -918,10 +1154,10 @@
 
                     <div class="button-group">
                         <button class="button secondary" onclick="survey.showReview = false; survey.render()">
-                            Wróć do ankiety
+                            ${this.t('backToSurvey')}
                         </button>
                         <button class="button" onclick="survey.showResults = true; survey.showReview = false; survey.render()">
-                            Pokaż wyniki
+                            ${this.t('showResults')}
                         </button>
                     </div>
                 `;
@@ -943,7 +1179,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16" style="vertical-align: middle; margin-right: 10px; color: var(--primary-color);">
                             <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
                         </svg>
-                        Wyniki Oceny Gotowości AI
+                        ${this.t('resultsTitle')}
                     </h1>
                     <div class="score" style="color: ${this.getScoreColor(overallScore)}">
                         ${Math.round(overallScore)}%
@@ -954,14 +1190,14 @@
 
                     <div class="download-buttons">
                         <button class="button icon-button" onclick="survey.downloadJSON()">
-                            📄 JSON
+                            JSON
                         </button>
                         <button class="button icon-button" onclick="survey.downloadCSV()">
-                            📊 CSV
+                            CSV
                         </button>
                     </div>
 
-                    <h3>Wyniki szczegółowe</h3>
+                    <h3>${this.t('detailedResults')}</h3>
                     <div class="results-grid">
                         ${sections.map(section => {
                             const score = this.calculateScore(section);
@@ -984,7 +1220,7 @@
                         }).join('')}
                     </div>
 
-                    <h3>Rekomendacje</h3>
+                    <h3>${this.t('recommendations')}</h3>
                     ${allRecommendations.map(rec => `
                         <div class="recommendation-card ${rec.type}">
                             ${rec.text}
@@ -993,10 +1229,10 @@
 
                     <div class="button-group">
                         <button class="button secondary" onclick="survey.showResults = false; survey.showReview = true; survey.render()">
-                            Przejrzyj odpowiedzi
+                            ${this.t('reviewAnswers')}
                         </button>
                         <button class="button" onclick="survey.reset()">
-                            Rozpocznij ponownie
+                            ${this.t('startAgain')}
                         </button>
                     </div>
                 `;
@@ -1021,13 +1257,13 @@
                             <div class="progress-bar" style="width: ${progress}%"></div>
                         </div>
                         <div style="text-align: right; font-size: 0.875rem; color: var(--text-light); margin-bottom: 1rem;">
-                            ${answeredQuestions}/${totalQuestions} pytań • ${Math.round(progress)}% ukończono
+                            ${answeredQuestions}/${totalQuestions} ${this.t('questionsAnswered')} • ${Math.round(progress)}% ${this.t('completed')}
                         </div>
 
                         <div class="question">
                             <div class="question-header">
                                 <span class="question-number">
-                                    Pytanie ${this.currentQuestionIndex + 1} z ${currentQuestions.length}
+                                    ${this.t('question')} ${this.currentQuestionIndex + 1} ${this.t('of')} ${currentQuestions.length}
                                 </span>
                             </div>
                             <p style="font-weight: 500; font-size: 1.25rem; margin: 1rem 0;">
@@ -1050,30 +1286,30 @@
                                 <button
                                     class="button secondary"
                                     onclick="survey.showReview = true; survey.showWelcome = false; survey.render()">
-                                    📋 Przejrzyj odpowiedzi
+                                    ${this.t('reviewAnswers')}
                                 </button>
                                 <button
                                     class="button"
                                     onclick="survey.showResults = true; survey.showReview = false; survey.showWelcome = false; survey.render()">
-                                    📊 Wyniki
+                                    ${this.t('results')}
                                 </button>
                             ` : `
                                 <button
                                     class="button secondary"
                                     onclick="survey.previousQuestion()"
                                     ${this.currentQuestionIndex === 0 && currentSectionIndex === 0 ? 'disabled' : ''}>
-                                    ← Poprzednie
+                                    ${this.t('previous')}
                                 </button>
                                 <button
                                     class="button"
                                     onclick="survey.nextQuestion()">
-                                    Następne →
+                                    ${this.t('next')}
                                 </button>
                             `}
                         </div>
 
                         <div class="help-text">
-                            <strong>Nawigacja:</strong> Użyj strzałek lub klawiszy <span class="kbd">1</span>-<span class="kbd">5</span> do szybkiego wyboru
+                            <strong>${this.t('navigation')}</strong> <span class="kbd">1</span>-<span class="kbd">5</span> ${this.t('quickSelect')}
                         </div>
                     `;
                 } else {
@@ -1088,12 +1324,12 @@
                             <div class="progress-bar" style="width: ${progress}%"></div>
                         </div>
                         <div style="text-align: right; font-size: 0.875rem; color: var(--text-light)">
-                            ${Math.round(progress)}% ukończono
+                            ${Math.round(progress)}% ${this.t('completed')}
                         </div>
                         ${currentQuestions.map((q, idx) => `
                             <div class="question">
                                 <div class="question-header">
-                                    <span class="question-number">Pytanie ${idx + 1} z ${currentQuestions.length}</span>
+                                    <span class="question-number">${this.t('question')} ${idx + 1} ${this.t('of')} ${currentQuestions.length}</span>
                                 </div>
                                 <p style="font-weight: 500; font-size: 1.125rem">
                                     ${q.text}
@@ -1114,25 +1350,25 @@
                                 <button
                                     class="button secondary"
                                     onclick="survey.showReview = true; survey.showWelcome = false; survey.render()">
-                                    📋 Przejrzyj odpowiedzi
+                                    ${this.t('reviewAnswers')}
                                 </button>
                                 <button
                                     class="button"
                                     onclick="survey.showResults = true; survey.showReview = false; survey.showWelcome = false; survey.render()">
-                                    📊 Wyniki
+                                    ${this.t('results')}
                                 </button>
                             ` : `
                                 <button
                                     class="button secondary"
                                     onclick="survey.previousSection()"
                                     ${currentSectionIndex === 0 ? 'disabled' : ''}>
-                                    ← Poprzednia sekcja
+                                    ${this.t('previousSection')}
                                 </button>
                                 <button
                                     class="button"
                                     onclick="survey.nextSection()"
                                     ${!allAnswered ? 'disabled' : ''}>
-                                    Następna sekcja →
+                                    ${this.t('nextSection')}
                                 </button>
                             `}
                         </div>
@@ -1168,4 +1404,4 @@
         });
     </script>
 </body>
-</html>int
+</html>
