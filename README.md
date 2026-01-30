@@ -1,0 +1,2 @@
+# aireadiness
+ai readiness questionaire
