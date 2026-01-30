@@ -161,6 +161,53 @@
         .button.secondary:hover:not(:disabled) {
             background: var(--gray-50);
         }
+
+        /* Answer option buttons - outlined by default with prominent hover/selected states */
+        .answer-btn {
+            background: var(--white);
+            color: var(--black);
+            border: 2px solid var(--gray-300);
+            padding: 16px 32px;
+            border-radius: 0;
+            cursor: pointer;
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        .answer-btn:hover:not(:disabled) {
+            background: var(--gray-100);
+            border-color: var(--gray-600);
+            transform: translateX(4px);
+        }
+        .answer-btn:active:not(:disabled) {
+            background: var(--gray-200);
+        }
+        .answer-btn:focus {
+            outline: 2px solid var(--black);
+            outline-offset: 2px;
+        }
+        .answer-btn.selected {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+        .answer-btn.selected:hover {
+            background: var(--gray-800);
+            border-color: var(--gray-800);
+            transform: none;
+        }
+        .answer-btn.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+        }
         .button-group {
             display: flex;
             gap: 16px;
@@ -200,11 +247,11 @@
         }
         .section-indicator {
             flex: 1;
-            min-width: 100px;
-            max-width: 150px;
-            padding: 12px 8px;
+            min-width: 140px;
+            max-width: 200px;
+            padding: 12px 10px;
             text-align: center;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             background: var(--white);
             color: var(--text-muted);
             border: none;
@@ -347,10 +394,10 @@
                 gap: 1px;
             }
             .section-indicator {
-                min-width: 60px;
-                max-width: 100px;
+                min-width: 80px;
+                max-width: 120px;
                 padding: 10px 6px;
-                font-size: 0.55rem;
+                font-size: 0.5rem;
             }
             .top-menu {
                 left: 10px;
@@ -1452,9 +1499,9 @@
                             <div>
                                 ${question.options.map((option, idx) => `
                                     <button
-                                        class="button ${this.answers[question.id] === question.scores[idx] ? 'selected' : ''}"
+                                        class="answer-btn ${this.answers[question.id] === question.scores[idx] ? 'selected' : ''}"
                                         onclick="survey.handleAnswer('${question.id}', ${question.scores[idx]}, ${JSON.stringify(question).replace(/"/g, '&quot;')}, ${idx})">
-                                        <span style="opacity: 0.7; margin-right: 8px;">${idx + 1}.</span>${option}
+                                        <span style="opacity: 0.5; margin-right: 8px;">${idx + 1}.</span>${option}
                                     </button>
                                 `).join('')}
                             </div>
@@ -1522,9 +1569,9 @@
                                 <div>
                                     ${q.options.map((option, optIdx) => `
                                         <button
-                                            class="button ${this.answers[q.id] === q.scores[optIdx] ? 'selected' : ''}"
+                                            class="answer-btn ${this.answers[q.id] === q.scores[optIdx] ? 'selected' : ''}"
                                             onclick="survey.handleAnswer('${q.id}', ${q.scores[optIdx]}, ${JSON.stringify(q).replace(/"/g, '&quot;')}, ${optIdx})">
-                                            ${option}
+                                            <span style="opacity: 0.5; margin-right: 8px;">${optIdx + 1}.</span>${option}
                                         </button>
                                     `).join('')}
                                 </div>
