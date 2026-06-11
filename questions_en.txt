@@ -1,30 +1,43 @@
-#Strategy & Leadership
-Does the city have a formal AI or smart city strategy?|Yes|In development|No
-How do you assess city leadership's (mayor, council) understanding of AI opportunities and risks?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are there risk management processes related to AI implementation?|Yes|Being implemented|No
-Is AI adoption included in the city's multi-year development plan?|Yes|Being planned|No
-Does the city participate in national or EU smart city initiatives?|Yes|In exploratory phase|No
+#Organizational Maturity
+Is there a formal AI development strategy in the organization?|Yes|In progress|No
+How do you assess the board's awareness of AI capabilities and limitations?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there risk management processes related to AI?|Yes|Being implemented|No
+How do you assess the culture of innovation in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there mechanisms to evaluate the success of AI projects?|Yes|In development|No
+Does the organization have policies and procedures ensuring compliance with AI-related legal regulations?|Yes|In progress|No
 
-#Data & Privacy
-Does the city have a policy for using citizen data in AI systems?|Yes|In development|No
-How do you assess the quality and availability of city operational data (traffic, utilities, permits)?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Does the city comply with GDPR and EU AI Act requirements for public sector AI use?|Yes|Partially|No
-Is there cross-departmental data sharing infrastructure between city services?|Yes|Partially|No
+#Data
+Does the organization have a data management strategy?|Yes|In development|No
+How do you assess the quality of data in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there data validation and cleaning processes?|Yes, comprehensive|Partial|No
+Is the data properly labeled and categorized?|Yes|Partially|No
+How do you assess the availability of data needed for training AI models?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the organization comply with data protection regulations in the context of AI?|Yes|Partially|No
 
-#City Services & Use Cases
-Have specific city services been identified for AI improvement (traffic, waste, safety, permits, citizen services)?|Yes, comprehensively|Partially|No
-Is there a pilot or proof-of-concept AI project currently running in the city?|Yes, multiple|Yes, one|No
-How do you assess residents' digital readiness to interact with AI-powered city services?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-How do you assess integration of AI solutions with existing city IT systems?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+#Technical Infrastructure
+Do the available computing resources and data storage (local or cloud) meet the requirements for training and running AI models?|Yes, fully|Partially|No
+Does the organization have a dedicated environment (local or cloud) for experimenting/testing new technological solutions (e.g., analytics, automation, AI)?|Yes|In progress|No
+Does the organization have tools for monitoring and managing the performance of environments (local and cloud), including service observability, costs, and availability?|Yes|Being implemented|No
+How do you assess the flexibility and scalability of the current infrastructure for load fluctuations and rapid deployment of new services?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the infrastructure (regardless of processing location) meet security and compliance requirements (e.g., GDPR, access control, encryption, audit logs) with the possibility of applying them to new solutions, including AI (e.g., AI Act requirements)?|Yes|Partially|No
 
-#Team & Partnerships
-Does the city have staff or a team dedicated to AI and digital innovation projects?|Yes|Being formed|No
-How do you assess the AI competence level of city IT and innovation teams?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Does the city have partnerships with universities, tech companies, or other cities on AI?|Yes, multiple|Yes, one|No
-Is there a process for evaluating and selecting AI vendors?|Yes|In development|No
+#Team and Skills
+Does the organization have a dedicated team for AI projects?|Yes|Being formed|No
+How do you assess the team's level of competence in AI?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Is there a competence development plan for AI?|Yes|In progress|No
+Does the team have experience in implementing AI projects?|Significant experience|Medium experience|Little experience|No experience
+How do you assess the collaboration between technical and business teams?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
 
-#Ethics & Citizen Trust
-Do residents have access to information about how their data is used in city AI systems?|Yes|Partially|No
-Are there safeguards against algorithmic bias in AI-assisted city decisions (permits, social services, public safety)?|Yes|Being implemented|No
-Does the city have a public-facing AI transparency or ethics policy?|Yes|In development|No
-Has the city assessed which AI applications fall under high-risk categories in the EU AI Act?|Yes|In progress|No
+#Business Processes
+Have business processes been identified for optimization through AI?|Yes, comprehensively|Partially|No
+How do you assess the readiness of processes for automation?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are there procedures for implementing AI solutions?|Yes|In progress|No
+How do you assess the integration of AI with existing business processes?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Are processes properly documented?|Yes, comprehensively|Partially|No
+
+#Financing
+Is there a dedicated budget for AI projects?|Yes|Being planned|No
+How do you assess the level of investment in AI development?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Is there a process for evaluating return on investment in AI?|Yes|In development|No
+How do you assess the availability of funds for AI training?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+Does the organization have a plan for long-term AI development financing?|Yes|In progress|No
