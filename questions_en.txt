@@ -1,43 +1,43 @@
-#Organizational Maturity
-Is there a formal AI development strategy in the organization?|Yes|In progress|No
-How do you assess the board's awareness of AI capabilities and limitations?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are there risk management processes related to AI?|Yes|Being implemented|No
-How do you assess the culture of innovation in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are there mechanisms to evaluate the success of AI projects?|Yes|In development|No
-Does the organization have policies and procedures ensuring compliance with AI-related legal regulations?|Yes|In progress|No
+#Strategy and leadership
+Does the organisation have a written AI strategy or plan?|Yes, approved and communicated|Yes, but still a draft|Discussions are ongoing, nothing written|No
+Does leadership understand what AI is and is not suited for in your organisation?|Yes, it can name specific use cases and limits|Partly, it knows the general concepts|Its picture comes mainly from the media|The topic is absent
+Is someone accountable for AI in the organisation (a person or a team)?|Yes, a formally assigned role|Informally, someone drives the topic|No, but we plan to|No
+Do AI initiatives have goals tied to organisational goals, with measures?|Yes, every initiative has a metric|Partly, for selected initiatives|Goals are general, without metrics|There are no AI initiatives
+How does the organisation approach new technology?|We test and adopt quickly|We test cautiously, at small scale|We wait until others have proven it|We avoid change
+
+#Policies and compliance
+Are there rules for employees' use of AI tools (e.g. ChatGPT, Copilot, Gemini)?|Yes, written and communicated|Yes, but informal|In preparation|No
+Is it clear which data may be entered into external AI tools?|Yes, a data classification is in force|General guidance, no specifics|Employees decide for themselves|It has never been discussed
+Does the organisation know its obligations under the EU AI Act?|Yes, we have classified our use cases by risk|Partly, we know the general requirements|We have heard of the regulation|No
+Is personal data processing in AI tools assessed for GDPR (e.g. DPIA, processing agreements)?|Yes, systematically|Only for selected projects|No, but we plan to|No
+Are AI-supported decisions subject to human oversight and explainable?|Yes, there is an oversight and appeal procedure|Oversight is informal|In preparation|No
+Does the organisation assess the risk of errors, bias and misuse in AI solutions?|Yes, before deployment and during use|Only before deployment|Ad hoc, after problems occur|No
 
 #Data
-Does the organization have a data management strategy?|Yes|In development|No
-How do you assess the quality of data in the organization?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are there data validation and cleaning processes?|Yes, comprehensive|Partial|No
-Is the data properly labeled and categorized?|Yes|Partially|No
-How do you assess the availability of data needed for training AI models?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Does the organization comply with data protection regulations in the context of AI?|Yes|Partially|No
+Is it known what data the organisation holds and where it lives (a data inventory)?|Yes, there is an up-to-date register|The register is partial|The knowledge is scattered in people's heads|No
+How would you rate the quality of key data (completeness, currency, consistency)?|High, regularly verified|Good, with isolated gaps|Variable, needs manual cleaning|Low or unknown
+Can data from different departments and systems be combined and shared?|Yes, through integrations or a shared warehouse|Partly, through manual exports|Rarely, data sits in silos|No
+Are the organisation's documents and knowledge digital and searchable?|Yes, for the most part|Partly|Mostly paper or scattered files|No
+Are there data access rules (who, to what, for what purpose)?|Yes, implemented and enforced|Yes, but not always followed|In preparation|No
 
-#Technical Infrastructure
-Do the available computing resources and data storage (local or cloud) meet the requirements for training and running AI models?|Yes, fully|Partially|No
-Does the organization have a dedicated environment (local or cloud) for experimenting/testing new technological solutions (e.g., analytics, automation, AI)?|Yes|In progress|No
-Does the organization have tools for monitoring and managing the performance of environments (local and cloud), including service observability, costs, and availability?|Yes|Being implemented|No
-How do you assess the flexibility and scalability of the current infrastructure for load fluctuations and rapid deployment of new services?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Does the infrastructure (regardless of processing location) meet security and compliance requirements (e.g., GDPR, access control, encryption, audit logs) with the possibility of applying them to new solutions, including AI (e.g., AI Act requirements)?|Yes|Partially|No
+#People and skills
+What share of employees regularly use AI tools at work?|Most|About half|A few individuals|Nobody, or we do not know
+Have employees been trained in AI (using the tools, risks, limitations)?|Yes, a training programme for everyone|Training for selected groups|Isolated, informal|No
+Are there people in the organisation able to evaluate and deploy an AI solution (alone or with a vendor)?|Yes, an experienced team|A few individuals|We rely entirely on vendors|No
+Is there an AI skills development plan?|Yes, with budget and timeline|Yes, a general one|In preparation|No
+How does collaboration between IT and business departments work?|Joint project teams|Regular but formal|Occasional|None or adversarial
 
-#Team and Skills
-Does the organization have a dedicated team for AI projects?|Yes|Being formed|No
-How do you assess the team's level of competence in AI?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Is there a competence development plan for AI?|Yes|In progress|No
-Does the team have experience in implementing AI projects?|Significant experience|Medium experience|Little experience|No experience
-How do you assess the collaboration between technical and business teams?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
+#Tools and infrastructure
+Does the organisation provide approved, company AI tools instead of employees' private accounts?|Yes, company licences with access control|Partly, for selected teams|No, employees use private accounts|We do not use AI tools
+Do key systems (ERP, CRM, document workflow) have APIs or integration options?|Yes, most of them|Some systems|A few|No, or we do not know
+Is there an environment for safely testing new solutions (sandbox, test environment)?|Yes|In preparation|We test in production|No
+Does the infrastructure (on-premise or cloud) meet security requirements: access control, encryption, audit logs?|Yes, fully|Partly|Only basic safeguards|No, or we do not know
+Are the costs and usage of AI tools and cloud monitored?|Yes, regularly|Ad hoc|No, but we plan to|No
 
-#Business Processes
-Have business processes been identified for optimization through AI?|Yes, comprehensively|Partially|No
-How do you assess the readiness of processes for automation?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are there procedures for implementing AI solutions?|Yes|In progress|No
-How do you assess the integration of AI with existing business processes?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Are processes properly documented?|Yes, comprehensively|Partially|No
-
-#Financing
-Is there a dedicated budget for AI projects?|Yes|Being planned|No
-How do you assess the level of investment in AI development?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Is there a process for evaluating return on investment in AI?|Yes|In development|No
-How do you assess the availability of funds for AI training?|Excellent|Very good|Good|Satisfactory|Unsatisfactory
-Does the organization have a plan for long-term AI development financing?|Yes|In progress|No
+#Deployment and financing
+Have specific processes been identified where AI will bring measurable benefit?|Yes, prioritised with estimated value|Yes, a list of ideas without priorities|A few ideas|No
+What experience does the organisation have with AI deployments?|AI solutions run in production|Completed pilots|First experiments|None
+Are there criteria for evaluating vendor solutions (security, cost, vendor lock-in)?|Yes, formal criteria|Informal assessment|Price or referral decides|No
+Is there a budget for AI initiatives?|Yes, a dedicated one|Within the general IT or innovation budget|Only ad hoc funds|No
+Is the return on AI deployments measured (time, cost, quality)?|Yes, systematically|For selected deployments|No, but we plan to|No
+Is there a plan for financing AI development beyond one year?|Yes|There are general assumptions|In preparation|No

@@ -1,11 +1,19 @@
 <!DOCTYPE html>
-<html lang="pl" id="html-root">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Readiness Assessment</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash/4.17.21/lodash.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Ocena gotowości AI</title>
+    <meta name="description" content="Bezpłatna samoocena gotowości organizacji do wdrożenia AI: strategia, zasady i zgodność, dane, kompetencje, narzędzia, wdrożenia. 32 pytania, wynik z rekomendacjami.">
+    <meta property="og:title" content="Ocena gotowości AI">
+    <meta property="og:description" content="32 pytania w 6 obszarach. Sprawdź, na ile Twoja organizacja jest gotowa na AI, i otrzymaj rekomendacje.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ready.warsztaty-ai.com/">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M9 22l4-12h2l4 12h-2.2l-1-3h-3.6l-1 3H9zm4-5h2.8L14.4 12.6 13 17zm9-7h2v12h-2V10z' fill='%23fff'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@1.41.0/dist/umd/lucide.min.js"></script>
     <style>
         :root {
             --black: #000000;
@@ -14,26 +22,18 @@
             --gray-100: #f5f5f5;
             --gray-200: #e5e5e5;
             --gray-300: #d4d4d4;
-            --gray-400: #a3a3a3;
-            --gray-500: #737373;
             --gray-600: #525252;
-            --gray-700: #404040;
             --gray-800: #262626;
             --gray-900: #171717;
-            --text-primary: #000000;
-            --text-secondary: #525252;
-            --text-muted: #737373;
-            --text-light: #737373;
-            --text-dark: #000000;
-            --primary: #000000;
-            --primary-color: #000000;
-            --selected: #000000;
+            --text-primary: var(--black);
+            --text-secondary: var(--gray-600);
+            --text-muted: #6b6b6b;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'SF Mono', 'Monaco', monospace;
         }
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: var(--font-sans);
             margin: 0;
             padding: 0;
             background: var(--white);
@@ -42,30 +42,38 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
 
-        /* Scroll Progress Indicator */
+        /* ─── Scroll progress ─── */
         .scroll-indicator {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 2px;
             background: var(--gray-100);
             z-index: 9999;
         }
-
         .scroll-progress {
             height: 100%;
             background: var(--black);
             width: 0%;
             transition: width 0.1s ease;
         }
+
+        /* ─── Layout ─── */
         .card {
             background: var(--white);
             max-width: 800px;
             margin: 0 auto;
             padding: 80px 40px;
             min-height: 100vh;
+            animation: fadeIn 0.4s ease;
         }
         .title {
             font-size: 3rem;
@@ -78,11 +86,23 @@
         .subtitle {
             font-size: 1.125rem;
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 2.5rem;
             line-height: 1.7;
             max-width: 560px;
+        }
+        h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin: 3rem 0 1rem;
+        }
+        .meta-line {
+            text-align: right;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
         }
         .progress {
             height: 4px;
@@ -97,14 +117,11 @@
             border-radius: 2px;
             transition: width 0.4s ease;
         }
+
+        /* ─── Question ─── */
         .question {
             margin: 3rem 0;
-        }
-        .question-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
+            animation: fadeIn 0.3s ease;
         }
         .question-number {
             font-size: 0.75rem;
@@ -113,6 +130,43 @@
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
+        .question-text {
+            font-weight: 500;
+            font-size: 1.25rem;
+            margin: 1rem 0;
+        }
+        .answer-btn {
+            background: var(--white);
+            color: var(--black);
+            border: 2px solid var(--gray-300);
+            padding: 16px 48px 16px 32px;
+            border-radius: 0;
+            cursor: pointer;
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+            position: relative;
+        }
+        .answer-btn:hover { background: var(--gray-100); border-color: var(--gray-600); transform: translateX(4px); }
+        .answer-btn:active { background: var(--gray-200); }
+        .answer-btn:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+        .answer-btn[aria-pressed="true"] { background: var(--black); color: var(--white); border-color: var(--black); }
+        .answer-btn[aria-pressed="true"]:hover { background: var(--gray-800); border-color: var(--gray-800); transform: none; }
+        .answer-btn[aria-pressed="true"]::after {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+        }
+        .answer-key { opacity: 0.5; margin-right: 8px; }
+
+        /* ─── Buttons ─── */
         .button {
             background: var(--black);
             color: var(--white);
@@ -122,124 +176,30 @@
             cursor: pointer;
             width: 100%;
             margin: 8px 0;
-            text-align: left;
+            font-family: inherit;
             font-size: 1rem;
             font-weight: 500;
-            transition: all 0.2s ease;
-            position: relative;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
-        .button:hover:not(:disabled) {
-            background: var(--gray-800);
-            border-color: var(--gray-800);
-        }
-        .button:active:not(:disabled) {
-            background: var(--gray-900);
-        }
-        .button:focus {
-            outline: 2px solid var(--black);
-            outline-offset: 2px;
-        }
-        .button.selected {
-            background: var(--black);
-            border-color: var(--black);
-        }
-        .button.selected::after {
-            content: '✓';
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 600;
-        }
-        .button:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-        .button.secondary {
-            background: var(--white);
-            color: var(--black);
-            border: 2px solid var(--black);
-        }
-        .button.secondary:hover:not(:disabled) {
-            background: var(--gray-50);
-        }
+        .button:hover:not(:disabled) { background: var(--gray-800); border-color: var(--gray-800); }
+        .button:active:not(:disabled) { background: var(--gray-900); }
+        .button:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+        .button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .button.secondary { background: var(--white); color: var(--black); }
+        .button.secondary:hover:not(:disabled) { background: var(--gray-50); border-color: var(--black); }
+        .button-group { display: flex; gap: 16px; margin-top: 3rem; }
+        .button-group .button { flex: 1; }
+        .button-group.centered { justify-content: center; }
+        .button-group.centered .button { max-width: 300px; }
+        .icon { width: 18px; height: 18px; flex: none; }
+        .icon-sm { width: 12px; height: 12px; vertical-align: middle; margin-right: 4px; }
 
-        /* Answer option buttons - outlined by default with prominent hover/selected states */
-        .answer-btn {
-            background: var(--white);
-            color: var(--black);
-            border: 2px solid var(--gray-300);
-            padding: 16px 32px;
-            border-radius: 0;
-            cursor: pointer;
-            width: 100%;
-            margin: 8px 0;
-            text-align: left;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.15s ease;
-            position: relative;
-        }
-        .answer-btn:hover:not(:disabled) {
-            background: var(--gray-100);
-            border-color: var(--gray-600);
-            transform: translateX(4px);
-        }
-        .answer-btn:active:not(:disabled) {
-            background: var(--gray-200);
-        }
-        .answer-btn:focus {
-            outline: 2px solid var(--black);
-            outline-offset: 2px;
-        }
-        .answer-btn.selected {
-            background: var(--black);
-            color: var(--white);
-            border-color: var(--black);
-        }
-        .answer-btn.selected:hover {
-            background: var(--gray-800);
-            border-color: var(--gray-800);
-            transform: none;
-        }
-        .answer-btn.selected::after {
-            content: '✓';
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 600;
-        }
-        .button-group {
-            display: flex;
-            gap: 16px;
-            margin-top: 3rem;
-        }
-        .button-group .button {
-            flex: 1;
-            text-align: center;
-        }
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1px;
-            background: var(--gray-200);
-            margin: 2rem 0;
-        }
-        .result-card {
-            padding: 2rem;
-            background: var(--white);
-        }
-        .result-card:hover {
-            background: var(--gray-50);
-        }
-        .score {
-            font-size: 4rem;
-            font-weight: 800;
-            text-align: center;
-            letter-spacing: -0.03em;
-            color: var(--black);
-        }
+        /* ─── Section navigator ─── */
         .section-navigator {
             display: flex;
             gap: 2px;
@@ -248,36 +208,107 @@
         }
         .section-indicator {
             flex: 1;
-            min-width: 120px;
-            padding: 12px 12px;
+            min-width: 0;
+            padding: 12px 8px;
             text-align: center;
+            font-family: inherit;
             font-size: 0.55rem;
             background: var(--white);
             color: var(--text-muted);
             border: none;
-            transition: all 0.2s ease;
+            transition: background 0.2s ease, color 0.2s ease;
             cursor: pointer;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.02em;
             line-height: 1.4;
         }
-        .section-indicator:hover {
-            background: var(--gray-50);
-            color: var(--text-primary);
+        .section-indicator small { display: block; font-size: 0.7rem; opacity: 0.8; }
+        .section-indicator:hover { background: var(--gray-50); color: var(--text-primary); }
+        .section-indicator:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
+        .section-indicator[aria-current="step"] { background: var(--black); color: var(--white); }
+        .section-indicator.completed { background: var(--gray-100); color: var(--text-primary); }
+
+        /* ─── Results and status ─── */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--gray-200);
+            margin: 2rem 0;
         }
-        .section-indicator.current {
+        .result-card { padding: 2rem; background: var(--white); }
+        .result-card.clickable { cursor: pointer; border: none; text-align: left; font-family: inherit; width: 100%; }
+        .result-card.clickable:hover { background: var(--gray-50); }
+        .result-card.clickable:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
+        .result-head { display: flex; justify-content: space-between; margin-bottom: 0.5rem; gap: 1rem; }
+        .result-name { font-weight: 600; font-size: 0.875rem; }
+        .result-value { font-weight: 800; font-size: 1.25rem; }
+        .result-small { font-size: 0.75rem; color: var(--text-muted); }
+        .result-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .score {
+            font-size: 4rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: -0.03em;
+            color: var(--black);
+        }
+        .score-label {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+        .recommendation-card {
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-left: 4px solid var(--black);
+            background: var(--gray-50);
+        }
+        .recommendation-card.medium { border-left-color: var(--gray-300); }
+        .recommendation-card.low { border-left-color: var(--gray-200); }
+        .recommendation-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .recommendation-title .band { color: var(--text-muted); font-weight: 500; }
+        .download-buttons { display: flex; flex-wrap: wrap; gap: 16px; margin: 2rem 0; justify-content: center; }
+        .download-buttons .button { width: auto; min-width: 120px; }
+        .share-box { display: flex; gap: 8px; margin: 1rem 0; }
+        .share-box input {
+            flex: 1;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            padding: 12px;
+            border: 1px solid var(--gray-300);
+            background: var(--gray-50);
+            min-width: 0;
+        }
+        .share-box .button { width: auto; margin: 0; }
+        .cta {
+            margin: 3rem 0 0;
+            padding: 2rem;
             background: var(--black);
             color: var(--white);
         }
-        .section-indicator.completed {
-            background: var(--gray-100);
-            color: var(--text-primary);
-        }
-        .welcome-screen {
+        .cta p { margin: 0 0 1rem; }
+        .cta .button { background: var(--white); color: var(--black); border-color: var(--white); width: auto; }
+        .cta .button:hover { background: var(--gray-100); border-color: var(--gray-100); }
+        .note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 1rem;
             text-align: center;
         }
-        /* Stats Grid - 4 column */
+
+        /* ─── Welcome ─── */
+        .welcome-screen { text-align: center; }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -286,218 +317,9 @@
             margin: 4rem 0;
             border: 1px solid var(--gray-200);
         }
-        .stat-item {
-            padding: 2rem 1rem;
-            background: var(--gray-50);
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--black);
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-        }
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 500;
-        }
-        .feature-list {
-            display: none;
-        }
-        .feature-item {
-            display: none;
-        }
-        .feature-icon {
-            display: none;
-        }
-        .review-section {
-            margin: 2rem 0;
-            padding: 2rem;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-        }
-        .review-question {
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--gray-200);
-        }
-        .review-question:last-child {
-            border-bottom: none;
-        }
-        .review-answer {
-            color: var(--text-secondary);
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-        .recommendation-card {
-            margin: 1rem 0;
-            padding: 1.5rem;
-            border-left: 4px solid var(--black);
-            background: var(--gray-50);
-        }
-        .recommendation-card.warning {
-            border-left-color: var(--gray-400);
-        }
-        .recommendation-card.danger {
-            border-left-color: var(--gray-600);
-        }
-        .recommendation-card.success {
-            border-left-color: var(--black);
-        }
-        .recommendation-card.info {
-            border-left-color: var(--gray-500);
-        }
-        .download-buttons {
-            display: flex;
-            gap: 16px;
-            margin: 2rem 0;
-            justify-content: center;
-        }
-        .download-buttons .button {
-            width: auto;
-            min-width: 120px;
-        }
-        .icon-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        h3 {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin: 3rem 0 1rem;
-        }
-
-        @media (max-width: 768px) {
-            .card {
-                padding: 40px 20px;
-            }
-            .title {
-                font-size: 2rem;
-            }
-            .button-group {
-                flex-direction: column;
-            }
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .section-navigator {
-                gap: 1px;
-            }
-            .section-indicator {
-                min-width: 70px;
-                padding: 8px 6px;
-                font-size: 0.45rem;
-            }
-            .top-menu {
-                left: 10px;
-                top: 10px;
-            }
-            .language-switcher {
-                right: 10px;
-                top: 10px;
-            }
-            .menu-btn {
-                padding: 6px 10px;
-                font-size: 0.65rem;
-            }
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .kbd {
-            background: var(--gray-100);
-            border: 1px solid var(--gray-300);
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-family: 'SF Mono', 'Monaco', monospace;
-            font-size: 0.75rem;
-        }
-
-        .language-switcher {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 1000;
-            display: flex;
-            gap: 0;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-        }
-
-        /* Top Menu */
-        .top-menu {
-            position: fixed;
-            top: 24px;
-            left: 24px;
-            z-index: 1000;
-            display: flex;
-            gap: 0;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-        }
-
-        .menu-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .menu-btn:hover {
-            background: var(--gray-50);
-            color: var(--text-primary);
-        }
-
-        .menu-btn.active {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        .menu-btn:not(:last-child) {
-            border-right: 1px solid var(--gray-200);
-        }
-
-        .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .lang-btn:hover {
-            background: var(--gray-50);
-            color: var(--text-primary);
-        }
-
-        .lang-btn.active {
-            background: var(--black);
-            color: var(--white);
-        }
-
+        .stat-item { padding: 2rem 1rem; background: var(--gray-50); text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 800; color: var(--black); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
         .help-text {
             font-size: 0.875rem;
             color: var(--text-muted);
@@ -507,85 +329,130 @@
             border: 1px solid var(--gray-200);
             text-align: center;
         }
-
-        /* Animations - subtle */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .kbd {
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
         }
 
-        .card {
-            animation: fadeIn 0.4s ease;
+        /* ─── Fixed chrome ─── */
+        .top-menu, .language-switcher {
+            position: fixed;
+            top: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
         }
+        .top-menu { left: 24px; }
+        .language-switcher { right: 24px; }
+        .menu-btn, .lang-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: background 0.2s ease, color 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .menu-btn:hover, .lang-btn:hover { background: var(--gray-50); color: var(--text-primary); }
+        .menu-btn:focus-visible, .lang-btn:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
+        .lang-btn[aria-pressed="true"] { background: var(--black); color: var(--white); }
+        .menu-btn:not(:last-child) { border-right: 1px solid var(--gray-200); }
+        .menu-btn .icon { width: 14px; height: 14px; }
 
-        .question {
-            animation: fadeIn 0.3s ease;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .card { padding: 72px 20px 40px; }
+            .title { font-size: 2rem; }
+            .button-group { flex-direction: column; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .section-navigator { gap: 1px; flex-wrap: wrap; }
+            .section-indicator { min-width: 33%; padding: 8px 6px; font-size: 0.45rem; }
+            .top-menu { left: 10px; top: 10px; }
+            .language-switcher { right: 10px; top: 10px; }
+            .menu-btn, .lang-btn { padding: 6px 10px; font-size: 0.65rem; }
+            .results-grid { grid-template-columns: 1fr; }
+            .share-box { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <!-- Top Menu -->
-    <div class="top-menu" id="top-menu">
-        <button class="menu-btn" id="menu-home" onclick="survey.goHome()">
-            <i data-lucide="home" style="width: 14px; height: 14px;"></i>
-            <span class="menu-label" data-key="menuHome">Home</span>
+    <nav class="top-menu" id="top-menu" aria-label="Menu">
+        <button class="menu-btn" id="menu-home" data-action="home">
+            <i data-lucide="home" class="icon" aria-hidden="true"></i>
+            <span class="menu-label" data-key="menuHome">Start</span>
         </button>
-        <button class="menu-btn" id="menu-restart" onclick="survey.confirmRestart()">
-            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
-            <span class="menu-label" data-key="menuRestart">Restart</span>
+        <button class="menu-btn" id="menu-restart" data-action="restart">
+            <i data-lucide="rotate-ccw" class="icon" aria-hidden="true"></i>
+            <span class="menu-label" data-key="menuRestart">Od nowa</span>
         </button>
-        <button class="menu-btn" id="menu-status" onclick="survey.showStatus()">
-            <i data-lucide="bar-chart" style="width: 14px; height: 14px;"></i>
+        <button class="menu-btn" id="menu-status" data-action="status">
+            <i data-lucide="chart-column" class="icon" aria-hidden="true"></i>
             <span class="menu-label" data-key="menuStatus">Status</span>
         </button>
+    </nav>
+
+    <div class="language-switcher" role="group" aria-label="Language">
+        <button class="lang-btn" id="lang-pl" data-lang="pl" aria-pressed="true" lang="pl">PL</button>
+        <button class="lang-btn" id="lang-en" data-lang="en" aria-pressed="false" lang="en">EN</button>
     </div>
 
-    <!-- Language Switcher -->
-    <div class="language-switcher">
-        <button class="lang-btn active" id="lang-pl" onclick="survey.setLanguage('pl')">PL</button>
-        <button class="lang-btn" id="lang-en" onclick="survey.setLanguage('en')">EN</button>
-    </div>
-
-    <!-- Scroll Progress Indicator -->
-    <div class="scroll-indicator">
+    <div class="scroll-indicator" aria-hidden="true">
         <div class="scroll-progress" id="scrollProgress"></div>
     </div>
 
-    <div id="app" class="card"></div>
-    
+    <main id="app" class="card"></main>
+    <div id="live" class="visually-hidden" aria-live="polite"></div>
+
     <script>
-        const translations = {
+        // ─── Constants ───
+        const STORAGE_KEY = 'aiready_v2';
+        const LANG_KEY = 'aiready_language';
+        const MINUTES_PER_QUESTION = 0.5;
+        const CONTACT_URL = 'https://warsztaty-ai.com';
+        const BANDS = [
+            { min: 80, key: 'highReadiness', rec: 'high' },
+            { min: 60, key: 'goodReadiness', rec: 'high' },
+            { min: 40, key: 'mediumReadiness', rec: 'medium' },
+            { min: 20, key: 'lowReadiness', rec: 'low' },
+            { min: 0, key: 'veryLowReadiness', rec: 'low' }
+        ];
+
+        const T = {
             pl: {
-                // Score labels
+                questionsFile: 'questions.txt',
                 highReadiness: 'Wysoka gotowość',
                 goodReadiness: 'Dobra gotowość',
                 mediumReadiness: 'Średnia gotowość',
                 lowReadiness: 'Niska gotowość',
                 veryLowReadiness: 'Bardzo niska gotowość',
 
-                // Welcome screen
-                title: 'Ocena Gotowości AI',
-                welcomeText: 'Witamy w narzędziu do oceny gotowości Twojej organizacji do wdrożenia sztucznej inteligencji. To badanie pomoże Ci zidentyfikować mocne strony oraz obszary wymagające rozwoju.',
-                questionsInCategories: 'pytań w',
-                categories: 'kategoriach',
-                estimatedTime: 'Szacowany czas:',
-                minutes: 'minut',
-                autoSave: 'Automatyczny zapis postępu',
-                detailedReport: 'Szczegółowy raport z rekomendacjami',
-                exportResults: 'Eksport wyników (CSV, JSON)',
-                oneByOne: 'Pytanie po pytaniu',
-                allQuestions: 'Wszystkie pytania',
-                helpTip: 'Wskazówka:',
-                helpText: 'Tryb "Pytanie po pytaniu" pozwala skupić się na jednym pytaniu naraz. Użyj strzałek lub klawiszy 1-5 do nawigacji.',
-
-                // Saved data
+                title: 'Ocena gotowości AI',
+                welcomeText: 'Sprawdź, na ile Twoja organizacja jest gotowa na wdrożenie sztucznej inteligencji. Odpowiedz na pytania w sześciu obszarach, a otrzymasz wynik i rekomendacje na start.',
+                helpText: 'Odpowiadaj tak, jak jest, a nie jak powinno być. Wynik zależy od szczerości odpowiedzi. Postęp zapisuje się automatycznie w tej przeglądarce.',
                 savedSurveyFound: 'Znaleziono zapisaną ankietę z',
                 answersCount: 'odpowiedziami.',
-                continueOrRestart: 'Czy chcesz kontynuować czy zacząć od nowa?',
+                continueOrRestart: 'Chcesz kontynuować czy zacząć od nowa?',
                 continueSurvey: 'Kontynuuj ankietę',
                 startFresh: 'Zacznij od nowa',
+                statQuestions: 'Pytania',
+                statCategories: 'Obszary',
+                statMinutes: 'Minut',
+                statFormats: 'Formaty eksportu',
 
-                // Navigation
                 part: 'Część',
                 question: 'Pytanie',
                 of: 'z',
@@ -593,95 +460,107 @@
                 completed: 'ukończono',
                 previous: 'Poprzednie',
                 next: 'Następne',
-                previousSection: 'Poprzednia sekcja',
-                nextSection: 'Następna sekcja',
-                navigation: 'Nawigacja:',
-                quickSelect: 'do szybkiego wyboru',
-
-                // Review
-                reviewTitle: 'Przegląd odpowiedzi',
-                reviewSubtitle: 'Sprawdź swoje odpowiedzi przed wyświetleniem wyników.',
-                backToSurvey: 'Wróć do ankiety',
-                showResults: 'Pokaż wyniki',
-                reviewAnswers: 'Przejrzyj odpowiedzi',
                 results: 'Wyniki',
+                quickSelect: 'szybki wybór odpowiedzi, strzałki: nawigacja',
+                announceQuestion: 'Pytanie',
+                announceSelected: 'Wybrano:',
 
-                // Results
-                resultsTitle: 'Wyniki Oceny Gotowości AI',
+                resultsTitle: 'Wyniki oceny gotowości AI',
+                overallNote: 'Wynik ogólny to średnia ze wszystkich pytań. Wynik obszaru to średnia z pytań w danym obszarze. Najwyższa odpowiedź daje 100%, najniższa 0%.',
                 detailedResults: 'Wyniki szczegółowe',
                 recommendations: 'Rekomendacje',
                 startAgain: 'Rozpocznij ponownie',
+                shareTitle: 'Udostępnij wynik',
+                shareNote: 'Link zawiera Twoje odpowiedzi. Każdy, kto go otworzy, zobaczy ten sam raport.',
+                copyLink: 'Kopiuj link',
+                copied: 'Skopiowano',
+                copyFailed: 'Nie udało się skopiować, zaznacz link ręcznie.',
+                sharedBanner: 'Oglądasz udostępniony wynik. Nie zapisuje się on w Twojej przeglądarce.',
+                startOwn: 'Zrób własną ocenę',
+                ctaTitle: 'Co dalej?',
+                ctaText: 'Wynik pokazuje, gdzie zacząć. Pomagamy organizacjom przejść od samooceny do planu wdrożenia: szkolenia dla kierownictwa i zespołów, polityki użycia AI, wybór pierwszych zastosowań.',
+                ctaButton: 'Porozmawiajmy o Twoim wyniku',
 
-                // CSV headers
-                csvSection: 'Sekcja',
+                csvSection: 'Obszar',
                 csvQuestion: 'Pytanie',
                 csvAnswer: 'Odpowiedź',
-                csvScore: 'Wynik',
+                csvScore: 'Wynik (0-1)',
                 csvSummary: 'Podsumowanie wyników',
                 csvSectionScore: 'Wynik %',
                 csvOverall: 'Wynik ogólny',
 
-                // Recommendations
-                recExcellent: 'Doskonała gotowość w obszarze',
-                recExcellentText: 'Kontynuuj dobre praktyki i dziel się swoim doświadczeniem.',
-                recGood: 'Dobra gotowość w obszarze',
-                recGoodText: 'Zidentyfikuj obszary do poprawy i stwórz plan działania.',
-                recMedium: 'Średnia gotowość w obszarze',
-                recMediumText: 'Zalecane są inwestycje w szkolenia i infrastrukturę.',
-                recLow: 'Niska gotowość w obszarze',
-                recLowText: 'Wymaga natychmiastowej uwagi i zasobów.',
-
-                questionsFile: 'questions.txt',
-
-                // Stats
-                statQuestions: 'Pytania',
-                statCategories: 'Kategorie',
-                statMinutes: 'Minut',
-                statFormats: 'Formaty',
-
-                // Menu
                 menuHome: 'Start',
                 menuRestart: 'Od nowa',
                 menuStatus: 'Status',
-                statusTitle: 'Aktualny Status',
-                statusSubtitle: 'Postęp w poszczególnych kategoriach',
+                statusTitle: 'Aktualny status',
+                statusSubtitle: 'Postęp w poszczególnych obszarach. Kliknij obszar, aby do niego przejść.',
                 notStarted: 'Nie rozpoczęto',
                 inProgress: 'W trakcie',
                 categoryCompleted: 'Ukończono',
                 continueAssessment: 'Kontynuuj',
-                startAssessment: 'Rozpocznij'
+                startAssessment: 'Rozpocznij',
+                incompleteNote: 'Aby zobaczyć wyniki, odpowiedz na wszystkie pytania.',
+                showResults: 'Pokaż wyniki',
+                restartTitle: 'Zacząć od nowa?',
+                restartText: 'Wszystkie odpowiedzi zostaną usunięte.',
+                restartConfirm: 'Tak, usuń odpowiedzi',
+                restartCancel: 'Anuluj',
+                loadError: 'Nie udało się wczytać pytań. Odśwież stronę.',
+
+                recs: [
+                    {
+                        high: 'Strategia ma właściciela i mierniki. Przeglądaj inicjatywy co kwartał i komunikuj wyniki całej organizacji.',
+                        medium: 'Kierownictwo interesuje się tematem, ale brakuje planu lub mierników. Zorganizuj warsztat strategiczny i spisz trzy priorytetowe kierunki na 12 miesięcy.',
+                        low: 'AI nie ma właściciela ani celu. Zacznij od krótkiego szkolenia dla kierownictwa i wyznacz jedną osobę odpowiedzialną za temat.'
+                    },
+                    {
+                        high: 'Zasady, ocena ryzyka i nadzór działają. Przeglądaj je co najmniej raz w roku i po każdej zmianie regulacji.',
+                        medium: 'Pracownicy korzystają z AI bez pełnych reguł. Uzupełnij politykę użycia narzędzi AI, klasyfikację danych i procedurę nadzoru nad decyzjami.',
+                        low: 'Brak zasad to realne ryzyko wycieku danych i naruszenia RODO. W ciągu miesiąca wprowadź minimalną politykę użycia AI i sprawdź obowiązki z AI Act.'
+                    },
+                    {
+                        high: 'Dane są uporządkowane i dostępne. Możesz przejść do zastosowań na własnych danych, np. asystentów pracujących na dokumentach organizacji.',
+                        medium: 'Dane są w silosach lub wymagają ręcznego czyszczenia. Zacznij od inwentarza danych i digitalizacji dokumentów w jednym procesie pilotażowym.',
+                        low: 'Bez uporządkowanych danych większość wdrożeń AI się nie powiedzie. Zrób inwentarz danych i wybierz jeden obszar do uporządkowania.'
+                    },
+                    {
+                        high: 'Zespół korzysta z AI i potrafi wdrażać rozwiązania. Rozwijaj wewnętrznych liderów i dziel się praktykami między działami.',
+                        medium: 'Z AI korzystają pojedyncze osoby. Zorganizuj podstawowe szkolenie dla całej organizacji i wyznacz ambasadorów w działach.',
+                        low: 'Brak kompetencji blokuje każdy kolejny krok. Zacznij od szkolenia dla kierownictwa i kluczowych pracowników.'
+                    },
+                    {
+                        high: 'Narzędzia są firmowe, bezpieczne i monitorowane. Możesz eksperymentować z integracją AI z systemami organizacji.',
+                        medium: 'Pracownicy używają prywatnych kont lub brakuje środowiska testowego. Wprowadź firmowe licencje z kontrolą dostępu i monitoring kosztów.',
+                        low: 'Podstawy bezpieczeństwa wymagają uporządkowania, zanim ruszą wdrożenia AI. Zacznij od przeglądu dostępów i zabezpieczeń.'
+                    },
+                    {
+                        high: 'Wdrożenia działają i są mierzone. Skaluj sprawdzone rozwiązania i planuj finansowanie wieloletnie.',
+                        medium: 'Są pomysły lub pilotaże, ale brakuje priorytetów, budżetu lub mierników. Wybierz jeden proces o wymiernej korzyści i przeprowadź pilotaż z jasnym miernikiem.',
+                        low: 'Brak wdrożeń, budżetu i doświadczenia. Zacznij od warsztatu identyfikacji zastosowań i małego, taniego pilotażu.'
+                    }
+                ]
             },
             en: {
-                // Score labels
+                questionsFile: 'questions_en.txt',
                 highReadiness: 'High readiness',
                 goodReadiness: 'Good readiness',
                 mediumReadiness: 'Medium readiness',
                 lowReadiness: 'Low readiness',
                 veryLowReadiness: 'Very low readiness',
 
-                // Welcome screen
-                title: 'AI Readiness Assessment',
-                welcomeText: 'Welcome to the tool for assessing your organization\'s readiness for artificial intelligence implementation. This survey will help you identify strengths and areas requiring development.',
-                questionsInCategories: 'questions in',
-                categories: 'categories',
-                estimatedTime: 'Estimated time:',
-                minutes: 'minutes',
-                autoSave: 'Automatic progress saving',
-                detailedReport: 'Detailed report with recommendations',
-                exportResults: 'Export results (CSV, JSON)',
-                oneByOne: 'One question at a time',
-                allQuestions: 'All questions',
-                helpTip: 'Tip:',
-                helpText: '"One question at a time" mode allows you to focus on one question. Use arrows or keys 1-5 to navigate.',
-
-                // Saved data
-                savedSurveyFound: 'Found saved survey with',
+                title: 'AI readiness assessment',
+                welcomeText: 'Find out how ready your organisation is to adopt artificial intelligence. Answer questions in six areas and get a score with recommendations on where to start.',
+                helpText: 'Answer as things are, not as they should be. The result is only as honest as the answers. Progress is saved automatically in this browser.',
+                savedSurveyFound: 'Found a saved survey with',
                 answersCount: 'answers.',
                 continueOrRestart: 'Do you want to continue or start fresh?',
                 continueSurvey: 'Continue survey',
                 startFresh: 'Start fresh',
+                statQuestions: 'Questions',
+                statCategories: 'Areas',
+                statMinutes: 'Minutes',
+                statFormats: 'Export formats',
 
-                // Navigation
                 part: 'Part',
                 question: 'Question',
                 of: 'of',
@@ -689,940 +568,685 @@
                 completed: 'completed',
                 previous: 'Previous',
                 next: 'Next',
-                previousSection: 'Previous section',
-                nextSection: 'Next section',
-                navigation: 'Navigation:',
-                quickSelect: 'for quick selection',
-
-                // Review
-                reviewTitle: 'Review Answers',
-                reviewSubtitle: 'Check your answers before viewing results.',
-                backToSurvey: 'Back to survey',
-                showResults: 'Show results',
-                reviewAnswers: 'Review answers',
                 results: 'Results',
+                quickSelect: 'quick answer, arrows: navigate',
+                announceQuestion: 'Question',
+                announceSelected: 'Selected:',
 
-                // Results
-                resultsTitle: 'AI Readiness Assessment Results',
+                resultsTitle: 'AI readiness results',
+                overallNote: 'The overall score is the average of all questions. An area score is the average of its questions. The top answer scores 100%, the bottom answer 0%.',
                 detailedResults: 'Detailed results',
                 recommendations: 'Recommendations',
                 startAgain: 'Start again',
+                shareTitle: 'Share the result',
+                shareNote: 'The link contains your answers. Anyone who opens it sees the same report.',
+                copyLink: 'Copy link',
+                copied: 'Copied',
+                copyFailed: 'Copy failed, select the link manually.',
+                sharedBanner: 'You are viewing a shared result. It is not saved in your browser.',
+                startOwn: 'Take your own assessment',
+                ctaTitle: 'What next?',
+                ctaText: 'The score shows where to start. We help organisations move from self-assessment to an adoption plan: training for leadership and teams, AI usage policies, selecting the first use cases.',
+                ctaButton: 'Talk to us about your result',
 
-                // CSV headers
-                csvSection: 'Section',
+                csvSection: 'Area',
                 csvQuestion: 'Question',
                 csvAnswer: 'Answer',
-                csvScore: 'Score',
+                csvScore: 'Score (0-1)',
                 csvSummary: 'Results summary',
                 csvSectionScore: 'Score %',
                 csvOverall: 'Overall score',
 
-                // Recommendations
-                recExcellent: 'Excellent readiness in area',
-                recExcellentText: 'Continue good practices and share your experience.',
-                recGood: 'Good readiness in area',
-                recGoodText: 'Identify areas for improvement and create an action plan.',
-                recMedium: 'Medium readiness in area',
-                recMediumText: 'Investments in training and infrastructure are recommended.',
-                recLow: 'Low readiness in area',
-                recLowText: 'Requires immediate attention and resources.',
-
-                questionsFile: 'questions_en.txt',
-
-                // Stats
-                statQuestions: 'Questions',
-                statCategories: 'Categories',
-                statMinutes: 'Minutes',
-                statFormats: 'Formats',
-
-                // Menu
                 menuHome: 'Home',
                 menuRestart: 'Restart',
                 menuStatus: 'Status',
-                statusTitle: 'Current Status',
-                statusSubtitle: 'Progress in each category',
+                statusTitle: 'Current status',
+                statusSubtitle: 'Progress in each area. Click an area to jump to it.',
                 notStarted: 'Not started',
                 inProgress: 'In progress',
                 categoryCompleted: 'Completed',
                 continueAssessment: 'Continue',
-                startAssessment: 'Start'
+                startAssessment: 'Start',
+                incompleteNote: 'Answer all questions to see the results.',
+                showResults: 'Show results',
+                restartTitle: 'Start over?',
+                restartText: 'All answers will be deleted.',
+                restartConfirm: 'Yes, delete answers',
+                restartCancel: 'Cancel',
+                loadError: 'Could not load the questions. Please refresh the page.',
+
+                recs: [
+                    {
+                        high: 'The strategy has an owner and metrics. Review initiatives quarterly and communicate results across the organisation.',
+                        medium: 'Leadership is interested, but a plan or metrics are missing. Run a strategy workshop and write down three priority directions for the next 12 months.',
+                        low: 'AI has neither an owner nor a goal. Start with a short briefing for leadership and assign one person accountable for the topic.'
+                    },
+                    {
+                        high: 'Policies, risk assessment and oversight are in place. Review them at least yearly and after every regulatory change.',
+                        medium: 'Employees use AI without complete rules. Complete the AI usage policy, data classification and the oversight procedure for decisions.',
+                        low: 'No rules means a real risk of data leaks and GDPR breaches. Within a month, introduce a minimal AI usage policy and check your AI Act obligations.'
+                    },
+                    {
+                        high: 'Data is organised and accessible. You can move to use cases on your own data, such as assistants working on the organisation\'s documents.',
+                        medium: 'Data sits in silos or needs manual cleaning. Start with a data inventory and document digitisation in one pilot process.',
+                        low: 'Without organised data most AI deployments fail. Build a data inventory and pick one area to clean up.'
+                    },
+                    {
+                        high: 'The team uses AI and can deploy solutions. Grow internal champions and share practices across departments.',
+                        medium: 'Only a few individuals use AI. Run basic training for the whole organisation and appoint champions in each department.',
+                        low: 'Missing skills block every next step. Start with training for leadership and key staff.'
+                    },
+                    {
+                        high: 'Tools are company-provided, secure and monitored. You can experiment with integrating AI into the organisation\'s systems.',
+                        medium: 'Employees use private accounts or there is no test environment. Introduce company licences with access control and cost monitoring.',
+                        low: 'Security basics need fixing before AI deployments start. Begin with a review of access rights and safeguards.'
+                    },
+                    {
+                        high: 'Deployments run and are measured. Scale what works and plan multi-year financing.',
+                        medium: 'There are ideas or pilots, but priorities, budget or metrics are missing. Pick one process with measurable benefit and run a pilot with a clear metric.',
+                        low: 'No deployments, budget or experience yet. Start with a use-case identification workshop and a small, cheap pilot.'
+                    }
+                ]
             }
         };
 
-        class Survey {
-            constructor() {
-                this.app = document.getElementById('app');
-                this.questions = {};
-                this.currentSection = '';
-                this.answers = {};
-                this.answerDetails = {}; // Store question text and selected option text
-                this.showResults = false;
-                this.showWelcome = true;
-                this.showReview = false;
-                this.showStatusView = false;
-                this.currentQuestionIndex = 0;
-                this.oneQuestionMode = true; // Always use one question mode
-                this.hasSavedData = false;
-                this.language = localStorage.getItem('aiready_language') || 'pl';
-                this.checkForSavedData();
-            }
+        // ─── State ───
+        const state = {
+            lang: 'pl',
+            sections: [],        // [{ name, questions: [{ text, options }] }]
+            sectionIdx: 0,
+            questionIdx: 0,
+            answers: {},         // { "sectionIdx-questionIdx": optionIdx }
+            view: 'welcome',     // welcome | survey | status | results | confirmRestart | error
+            hasSavedData: false,
+            shared: false        // viewing a result loaded from a share link
+        };
 
-            t(key) {
-                return translations[this.language][key] || key;
-            }
+        // ─── DOM refs ───
+        const appEl = document.getElementById('app');
+        const liveEl = document.getElementById('live');
+        const scrollEl = document.getElementById('scrollProgress');
 
-            setLanguage(lang) {
-                this.language = lang;
-                localStorage.setItem('aiready_language', lang);
-                document.getElementById('html-root').lang = lang;
+        // ─── Helpers ───
+        const t = key => T[state.lang][key] ?? key;
+        const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const qid = (s, q) => `${s}-${q}`;
+        const icon = (name, cls = 'icon') => `<i data-lucide="${name}" class="${cls}" aria-hidden="true"></i>`;
+        const announce = msg => { liveEl.textContent = ''; setTimeout(() => { liveEl.textContent = msg; }, 50); };
 
-                // Update language button states
-                document.getElementById('lang-pl').classList.toggle('active', lang === 'pl');
-                document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+        function storageGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+        function storageSet(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* private mode */ } }
+        function storageRemove(key) { try { localStorage.removeItem(key); } catch (e) { /* ignore */ } }
 
-                // Reload questions for the new language
-                this.reloadQuestions();
-            }
-
-            async reloadQuestions() {
-                try {
-                    const response = await fetch(this.t('questionsFile'));
-                    const text = await response.text();
-                    this.questions = this.parseQuestions(text);
-                    if (!this.currentSection || !this.questions[this.currentSection]) {
-                        this.currentSection = Object.keys(this.questions)[0];
+        function parseQuestions(text) {
+            const sections = [];
+            text.split('\n').forEach(line => {
+                if (line.startsWith('#')) {
+                    sections.push({ name: line.substring(1).trim(), questions: [] });
+                } else if (line.trim() && sections.length) {
+                    const [question, ...options] = line.split('|').map(s => s.trim());
+                    if (question && options.length > 1) {
+                        sections[sections.length - 1].questions.push({ text: question, options });
                     }
-                    this.render();
-                } catch (error) {
-                    console.error('Error loading questions:', error);
+                }
+            });
+            return sections;
+        }
+
+        async function loadQuestions() {
+            const response = await fetch(t('questionsFile'));
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            state.sections = parseQuestions(await response.text());
+            if (!state.sections.length) throw new Error('No sections parsed');
+            validateState();
+        }
+
+        function validateState() {
+            const valid = {};
+            state.sections.forEach((section, s) => {
+                section.questions.forEach((q, i) => {
+                    const v = state.answers[qid(s, i)];
+                    if (Number.isInteger(v) && v >= 0 && v < q.options.length) valid[qid(s, i)] = v;
+                });
+            });
+            state.answers = valid;
+            state.sectionIdx = Math.min(Math.max(0, state.sectionIdx | 0), state.sections.length - 1);
+            state.questionIdx = Math.min(Math.max(0, state.questionIdx | 0), state.sections[state.sectionIdx].questions.length - 1);
+        }
+
+        function saveState() {
+            if (state.shared) return;
+            storageSet(STORAGE_KEY, JSON.stringify({
+                answers: state.answers,
+                sectionIdx: state.sectionIdx,
+                questionIdx: state.questionIdx
+            }));
+        }
+
+        function loadSavedState() {
+            try {
+                const saved = JSON.parse(storageGet(STORAGE_KEY) || 'null');
+                if (saved && saved.answers && typeof saved.answers === 'object') {
+                    state.answers = saved.answers;
+                    state.sectionIdx = saved.sectionIdx;
+                    state.questionIdx = saved.questionIdx;
+                }
+            } catch (e) {
+                storageRemove(STORAGE_KEY);
+            }
+            state.hasSavedData = Object.keys(state.answers).length > 0;
+        }
+
+        function clearSavedState() {
+            storageRemove(STORAGE_KEY);
+            state.answers = {};
+            state.sectionIdx = 0;
+            state.questionIdx = 0;
+            state.hasSavedData = false;
+        }
+
+        // ─── Scoring ───
+        function questionScore(s, i) {
+            const v = state.answers[qid(s, i)];
+            if (v === undefined) return null;
+            const n = state.sections[s].questions[i].options.length;
+            return (n - 1 - v) / (n - 1);
+        }
+
+        function sectionScore(s) {
+            const qs = state.sections[s].questions;
+            const total = qs.reduce((sum, _, i) => sum + (questionScore(s, i) ?? 0), 0);
+            return (total / qs.length) * 100;
+        }
+
+        function overallScore() {
+            let total = 0, count = 0;
+            state.sections.forEach((section, s) => section.questions.forEach((_, i) => {
+                total += questionScore(s, i) ?? 0;
+                count++;
+            }));
+            return count ? (total / count) * 100 : 0;
+        }
+
+        const bandFor = score => BANDS.find(b => score >= b.min);
+        const scoreLabel = score => t(bandFor(score).key);
+        const totalQuestions = () => state.sections.reduce((sum, s) => sum + s.questions.length, 0);
+        const answeredCount = () => Object.keys(state.answers).length;
+        const allAnswered = () => answeredCount() === totalQuestions();
+        const maxOptions = () => Math.max(...state.sections.flatMap(s => s.questions.map(q => q.options.length)));
+
+        function sectionProgress(s) {
+            const qs = state.sections[s].questions;
+            const answered = qs.filter((_, i) => state.answers[qid(s, i)] !== undefined).length;
+            return { answered, total: qs.length, percentage: (answered / qs.length) * 100, isCompleted: answered === qs.length };
+        }
+
+        function firstUnanswered() {
+            for (let s = 0; s < state.sections.length; s++) {
+                for (let i = 0; i < state.sections[s].questions.length; i++) {
+                    if (state.answers[qid(s, i)] === undefined) return { s, i };
                 }
             }
+            return null;
+        }
 
-            checkForSavedData() {
-                try {
-                    const savedAnswers = localStorage.getItem('aiready_answers');
-                    if (savedAnswers) {
-                        const parsed = JSON.parse(savedAnswers);
-                        this.hasSavedData = Object.keys(parsed).length > 0;
-                        if (this.hasSavedData) {
-                            this.answers = parsed;
-                            const savedDetails = localStorage.getItem('aiready_details');
-                            if (savedDetails) {
-                                this.answerDetails = JSON.parse(savedDetails);
-                            }
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error loading saved data:', e);
-                    this.hasSavedData = false;
-                }
-            }
+        // ─── Share link ───
+        function encodeShare() {
+            const digits = state.sections.flatMap((section, s) =>
+                section.questions.map((_, i) => state.answers[qid(s, i)] ?? '-')).join('');
+            return `${location.origin}${location.pathname}#r=${state.lang}.${digits}`;
+        }
 
-            loadFromLocalStorage() {
-                const savedAnswers = localStorage.getItem('aiready_answers');
-                const savedDetails = localStorage.getItem('aiready_details');
-                const savedSection = localStorage.getItem('aiready_section');
-                const savedIndex = localStorage.getItem('aiready_index');
+        function decodeShare() {
+            const m = location.hash.match(/^#r=(pl|en)\.([0-9-]+)$/);
+            return m ? { lang: m[1], digits: m[2] } : null;
+        }
 
-                if (savedAnswers) this.answers = JSON.parse(savedAnswers);
-                if (savedDetails) this.answerDetails = JSON.parse(savedDetails);
-                if (savedSection) this.currentSection = savedSection;
-                if (savedIndex) this.currentQuestionIndex = parseInt(savedIndex);
+        function applyShare(digits) {
+            let k = 0;
+            const answers = {};
+            state.sections.forEach((section, s) => section.questions.forEach((_, i) => {
+                const ch = digits[k++];
+                if (ch !== undefined && ch !== '-') answers[qid(s, i)] = parseInt(ch, 10);
+            }));
+            state.answers = answers;
+            validateState();
+        }
 
-                this.showWelcome = false;
-            }
+        // ─── Exports ───
+        function download(content, type, ext) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai-readiness-${new Date().toISOString().split('T')[0]}.${ext}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
 
-            async initialize() {
-                try {
-                    // Set initial language button state
-                    document.getElementById('lang-pl').classList.toggle('active', this.language === 'pl');
-                    document.getElementById('lang-en').classList.toggle('active', this.language === 'en');
-                    document.getElementById('html-root').lang = this.language;
-
-                    const response = await fetch(this.t('questionsFile'));
-                    const text = await response.text();
-                    this.questions = this.parseQuestions(text);
-                    if (!this.currentSection) {
-                        this.currentSection = Object.keys(this.questions)[0];
-                    }
-                    this.setupKeyboardNavigation();
-                    this.render();
-                } catch (error) {
-                    console.error('Error loading questions:', error);
-                }
-            }
-
-            parseQuestions(text) {
-                const sections = {};
-                let currentSection = '';
-
-                text.split('\n').forEach(line => {
-                    if (line.startsWith('#')) {
-                        currentSection = line.substring(1).trim();
-                        sections[currentSection] = [];
-                    } else if (line.trim() && currentSection) {
-                        const [question, ...options] = line.split('|');
-                        if (question && options.length) {
-                            sections[currentSection].push({
-                                id: `${currentSection}-${sections[currentSection].length + 1}`,
-                                text: question.trim(),
-                                options: options.map(o => o.trim()),
-                                scores: options.map((_, i) => options.length - i)
-                            });
-                        }
+        function downloadJSON() {
+            const data = { timestamp: new Date().toISOString(), language: state.lang, answers: [], scores: {} };
+            state.sections.forEach((section, s) => {
+                section.questions.forEach((q, i) => {
+                    const v = state.answers[qid(s, i)];
+                    if (v !== undefined) {
+                        data.answers.push({ section: section.name, question: q.text, answer: q.options[v], score: questionScore(s, i) });
                     }
                 });
-
-                return sections;
-            }
-
-            setupKeyboardNavigation() {
-                document.addEventListener('keydown', (e) => {
-                    if (this.showWelcome || this.showResults) return;
-
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        this.nextQuestion();
-                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        this.previousQuestion();
-                    } else if (e.key >= '1' && e.key <= '5') {
-                        e.preventDefault();
-                        this.selectAnswerByNumber(parseInt(e.key) - 1);
-                    }
-                });
-            }
-
-            selectAnswerByNumber(index) {
-                if (!this.oneQuestionMode) return;
-
-                const currentQuestions = this.questions[this.currentSection];
-                const question = currentQuestions[this.currentQuestionIndex];
-                if (question && question.options[index]) {
-                    this.handleAnswer(question.id, question.scores[index], question, index);
-                }
-            }
-
-            nextQuestion() {
-                if (!this.oneQuestionMode) return;
-
-                const currentQuestions = this.questions[this.currentSection];
-                if (this.currentQuestionIndex < currentQuestions.length - 1) {
-                    this.currentQuestionIndex++;
-                    this.render();
-                } else {
-                    this.nextSection();
-                }
-            }
-
-            previousQuestion() {
-                if (!this.oneQuestionMode) return;
-
-                if (this.currentQuestionIndex > 0) {
-                    this.currentQuestionIndex--;
-                    this.render();
-                } else {
-                    this.previousSection();
-                }
-            }
-
-            previousSection() {
-                const sections = Object.keys(this.questions);
-                const currentIndex = sections.indexOf(this.currentSection);
-
-                if (currentIndex > 0) {
-                    this.currentSection = sections[currentIndex - 1];
-                    const prevSectionQuestions = this.questions[this.currentSection];
-                    this.currentQuestionIndex = prevSectionQuestions.length - 1;
-                    this.render();
-                }
-            }
-
-            saveToLocalStorage() {
-                localStorage.setItem('aiready_answers', JSON.stringify(this.answers));
-                localStorage.setItem('aiready_details', JSON.stringify(this.answerDetails));
-                localStorage.setItem('aiready_section', this.currentSection);
-                localStorage.setItem('aiready_index', this.currentQuestionIndex.toString());
-            }
-
-            clearLocalStorage() {
-                localStorage.removeItem('aiready_answers');
-                localStorage.removeItem('aiready_details');
-                localStorage.removeItem('aiready_section');
-                localStorage.removeItem('aiready_index');
-            }
-
-            getScoreColor(score) {
-                if (score >= 80) return '#000000';
-                if (score >= 60) return '#404040';
-                if (score >= 40) return '#737373';
-                if (score >= 20) return '#a3a3a3';
-                return '#d4d4d4';
-            }
-
-            getScoreLabel(score) {
-                if (score >= 80) return this.t('highReadiness');
-                if (score >= 60) return this.t('goodReadiness');
-                if (score >= 40) return this.t('mediumReadiness');
-                if (score >= 20) return this.t('lowReadiness');
-                return this.t('veryLowReadiness');
-            }
-
-            calculateScore(section) {
-                const sectionData = this.questions[section];
-                const sectionAnswers = sectionData
-                    .map(q => this.answers[q.id])
-                    .filter(score => score !== undefined);
-
-                if (sectionAnswers.length === 0) return 0;
-
-                const actualScore = sectionAnswers.reduce((sum, score) => sum + score, 0);
-                const maxScore = sectionData.reduce((sum, q) => sum + q.scores[0], 0); // q.scores[0] is the highest score for each question
-                return (actualScore / maxScore) * 100;
-            }
-
-            calculateProgress() {
-                const totalQuestions = Object.values(this.questions)
-                    .reduce((sum, section) => sum + section.length, 0);
-                const answeredQuestions = Object.keys(this.answers).length;
-                return (answeredQuestions / totalQuestions) * 100;
-            }
-
-            getTotalQuestions() {
-                return Object.values(this.questions)
-                    .reduce((sum, section) => sum + section.length, 0);
-            }
-
-            isSectionCompleted(section) {
-                const sectionData = this.questions[section];
-                return sectionData.every(q => this.answers[q.id] !== undefined);
-            }
-
-            getRecommendations(score, section) {
-                const recommendations = [];
-
-                if (score >= 80) {
-                    recommendations.push({
-                        type: 'success',
-                        text: `${this.t('recExcellent')} "${section}". ${this.t('recExcellentText')}`
-                    });
-                } else if (score >= 60) {
-                    recommendations.push({
-                        type: 'info',
-                        text: `${this.t('recGood')} "${section}". ${this.t('recGoodText')}`
-                    });
-                } else if (score >= 40) {
-                    recommendations.push({
-                        type: 'warning',
-                        text: `${this.t('recMedium')} "${section}". ${this.t('recMediumText')}`
-                    });
-                } else {
-                    recommendations.push({
-                        type: 'danger',
-                        text: `${this.t('recLow')} "${section}". ${this.t('recLowText')}`
-                    });
-                }
-
-                return recommendations;
-            }
-
-            renderSectionNavigator() {
-                const sections = Object.keys(this.questions);
-                return `
-                    <div class="section-navigator">
-                        ${sections.map((section, index) => {
-                            const isCurrent = section === this.currentSection;
-                            const isCompleted = this.isSectionCompleted(section);
-                            const classes = ['section-indicator'];
-                            if (isCurrent) classes.push('current');
-                            else if (isCompleted) classes.push('completed');
-
-                            return `
-                                <div class="${classes.join(' ')}" onclick="survey.goToSection('${section}')">
-                                    <div style="font-size: 0.75rem; opacity: 0.8;">${this.t('part')} ${index + 1}</div>
-                                    <div>${section}</div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                `;
-            }
-
-            goToSection(section) {
-                this.currentSection = section;
-                this.currentQuestionIndex = 0;
-                this.render();
-            }
-
-            handleAnswer(id, score, question, optionIndex) {
-                this.answers[id] = score;
-                this.answerDetails[id] = {
-                    question: question.text,
-                    answer: question.options[optionIndex],
-                    score: score,
-                    section: this.currentSection
-                };
-                this.saveToLocalStorage();
-
-                if (this.oneQuestionMode) {
-                    this.nextQuestion();
-                } else {
-                    this.render();
-                }
-            }
-
-            nextSection() {
-                const sections = Object.keys(this.questions);
-                const currentIndex = sections.indexOf(this.currentSection);
-
-                if (currentIndex < sections.length - 1) {
-                    this.currentSection = sections[currentIndex + 1];
-                    this.currentQuestionIndex = 0;
-                } else {
-                    this.showResults = true;
-                }
-                this.render();
-            }
-
-            continueSurvey() {
-                this.loadFromLocalStorage();
-                this.render();
-            }
-
-            startFresh() {
-                this.clearLocalStorage();
-                this.answers = {};
-                this.answerDetails = {};
-                this.hasSavedData = false;
-                this.render();
-            }
-
-            startSurvey(oneQuestionMode = true) {
-                this.showWelcome = false;
-                this.showStatusView = false;
-                this.oneQuestionMode = true; // Always one question at a time
-                this.render();
-            }
-
-            reset() {
-                this.answers = {};
-                this.answerDetails = {};
-                this.showResults = false;
-                this.showWelcome = true;
-                this.showReview = false;
-                this.showStatusView = false;
-                this.currentSection = Object.keys(this.questions)[0];
-                this.currentQuestionIndex = 0;
-                this.hasSavedData = false;
-                this.clearLocalStorage();
-                this.render();
-            }
-
-            // Menu methods
-            goHome() {
-                this.showWelcome = true;
-                this.showResults = false;
-                this.showReview = false;
-                this.showStatusView = false;
-                this.checkForSavedData();
-                this.render();
-            }
-
-            confirmRestart() {
-                if (Object.keys(this.answers).length > 0) {
-                    if (confirm(this.language === 'pl' ?
-                        'Czy na pewno chcesz rozpocząć od nowa? Wszystkie odpowiedzi zostaną utracone.' :
-                        'Are you sure you want to restart? All answers will be lost.')) {
-                        this.reset();
-                    }
-                } else {
-                    this.reset();
-                }
-            }
-
-            showStatus() {
-                this.showStatusView = true;
-                this.showWelcome = false;
-                this.showResults = false;
-                this.showReview = false;
-                this.render();
-            }
-
-            getSectionProgress(section) {
-                const sectionData = this.questions[section];
-                const answered = sectionData.filter(q => this.answers[q.id] !== undefined).length;
-                return {
-                    answered,
-                    total: sectionData.length,
-                    percentage: (answered / sectionData.length) * 100,
-                    isCompleted: answered === sectionData.length
-                };
-            }
-
-            renderStatus() {
-                const sections = Object.keys(this.questions);
-                const totalAnswered = Object.keys(this.answers).length;
-                const totalQuestions = this.getTotalQuestions();
-
-                return `
-                    <h1 class="title">${this.t('statusTitle')}</h1>
-                    <p class="subtitle">${this.t('statusSubtitle')}</p>
-
-                    <div class="progress" style="margin-bottom: 0.5rem;">
-                        <div class="progress-bar" style="width: ${(totalAnswered / totalQuestions) * 100}%"></div>
-                    </div>
-                    <div style="text-align: right; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 2rem;">
-                        ${totalAnswered}/${totalQuestions} ${this.t('questionsAnswered')} • ${Math.round((totalAnswered / totalQuestions) * 100)}% ${this.t('completed')}
-                    </div>
-
-                    <div class="results-grid">
-                        ${sections.map(section => {
-                            const progress = this.getSectionProgress(section);
-                            const score = progress.isCompleted ? this.calculateScore(section) : null;
-                            return `
-                                <div class="result-card" style="cursor: pointer;" onclick="survey.goToSection('${section}')">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                        <span style="font-weight: 600; font-size: 0.875rem;">${section}</span>
-                                        ${progress.isCompleted ? `
-                                            <span style="font-weight: 800; font-size: 1.25rem;">${Math.round(score)}%</span>
-                                        ` : `
-                                            <span style="font-size: 0.75rem; color: var(--text-muted);">
-                                                ${progress.answered}/${progress.total}
-                                            </span>
-                                        `}
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: ${progress.percentage}%;"></div>
-                                    </div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                                        ${progress.isCompleted ?
-                                            `<i data-lucide="check-circle" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('categoryCompleted')}` :
-                                            progress.answered > 0 ?
-                                                `<i data-lucide="clock" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('inProgress')}` :
-                                                `<i data-lucide="circle" style="width: 12px; height: 12px; margin-right: 4px; vertical-align: middle;"></i>${this.t('notStarted')}`
-                                        }
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-
-                    <div class="button-group">
-                        ${totalAnswered > 0 ? `
-                            <button class="button" onclick="survey.continueSurveyFromStatus()">
-                                <i data-lucide="play" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('continueAssessment')}
-                            </button>
-                        ` : `
-                            <button class="button" onclick="survey.startSurvey(true)">
-                                <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('startAssessment')}
-                            </button>
-                        `}
-                    </div>
-                `;
-            }
-
-            continueSurveyFromStatus() {
-                this.showStatusView = false;
-                this.showWelcome = false;
-                this.oneQuestionMode = true;
-                this.render();
-            }
-
-            downloadJSON() {
-                const data = {
-                    timestamp: new Date().toISOString(),
-                    answers: this.answerDetails,
-                    scores: {}
-                };
-
-                Object.keys(this.questions).forEach(section => {
-                    data.scores[section] = this.calculateScore(section);
-                });
-
-                const overallScore = Object.values(data.scores).reduce((a, b) => a + b, 0) / Object.keys(data.scores).length;
-                data.overallScore = overallScore;
-
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `ai-readiness-${new Date().toISOString().split('T')[0]}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-
-            downloadCSV() {
-                let csv = `${this.t('csvSection')},${this.t('csvQuestion')},${this.t('csvAnswer')},${this.t('csvScore')}\n`;
-
-                Object.values(this.answerDetails).forEach(detail => {
-                    csv += `"${detail.section}","${detail.question}","${detail.answer}",${detail.score}\n`;
-                });
-
-                csv += `\n\n${this.t('csvSummary')}\n`;
-                csv += `${this.t('csvSection')},${this.t('csvSectionScore')}\n`;
-                Object.keys(this.questions).forEach(section => {
-                    const score = this.calculateScore(section);
-                    csv += `"${section}",${Math.round(score)}\n`;
-                });
-
-                const overallScore = Object.keys(this.questions)
-                    .reduce((sum, sec) => sum + this.calculateScore(sec), 0) / Object.keys(this.questions).length;
-                csv += `\n"${this.t('csvOverall')}",${Math.round(overallScore)}\n`;
-
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `ai-readiness-${new Date().toISOString().split('T')[0]}.csv`;
-                a.click();
-                URL.revokeObjectURL(url);
-            }
-
-            renderWelcome() {
-                const totalQuestions = this.getTotalQuestions();
-                const estimatedTime = Math.ceil(totalQuestions * 0.5);
-
-                if (this.hasSavedData) {
-                    const savedAnswersCount = Object.keys(this.answers).length;
-                    return `
-                        <div class="welcome-screen">
-                            <h1 class="title">${this.t('title')}</h1>
-                            <p class="subtitle">
-                                ${this.t('savedSurveyFound')} ${savedAnswersCount} ${this.t('answersCount')}
-                                ${this.t('continueOrRestart')}
-                            </p>
-
-                            <div class="button-group">
-                                <button class="button" onclick="survey.continueSurvey()">
-                                    <i data-lucide="play" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                    ${this.t('continueSurvey')}
-                                </button>
-                                <button class="button secondary" onclick="survey.startFresh()">
-                                    <i data-lucide="refresh-cw" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                    ${this.t('startFresh')}
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                return `
-                    <div class="welcome-screen">
-                        <h1 class="title">${this.t('title')}</h1>
-                        <p class="subtitle">
-                            ${this.t('welcomeText')}
-                        </p>
-
-                        <div class="button-group" style="justify-content: center;">
-                            <button class="button" style="max-width: 300px;" onclick="survey.startSurvey(true)">
-                                <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('startAssessment')}
-                            </button>
-                        </div>
-
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <div class="stat-value">${totalQuestions}</div>
-                                <div class="stat-label">${this.t('statQuestions')}</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">${Object.keys(this.questions).length}</div>
-                                <div class="stat-label">${this.t('statCategories')}</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">~${estimatedTime}</div>
-                                <div class="stat-label">${this.t('statMinutes')}</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value">2</div>
-                                <div class="stat-label">${this.t('statFormats')}</div>
-                            </div>
-                        </div>
-
-                        <div class="help-text">
-                            <i data-lucide="info" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
-                            ${this.t('helpText')}
-                        </div>
-                    </div>
-                `;
-            }
-
-            renderReview() {
-                const sections = Object.keys(this.questions);
-
-                return `
-                    <h2 class="title">${this.t('reviewTitle')}</h2>
-                    <p class="subtitle">${this.t('reviewSubtitle')}</p>
-
-                    ${sections.map(section => {
-                        const sectionQuestions = this.questions[section];
-                        return `
-                            <div class="review-section">
-                                <h3 style="margin-top: 0;">${section}</h3>
-                                ${sectionQuestions.map(q => {
-                                    const detail = this.answerDetails[q.id];
-                                    return detail ? `
-                                        <div class="review-question">
-                                            <div style="font-weight: 500;">${detail.question}</div>
-                                            <div class="review-answer"><i data-lucide="check" style="width: 14px; height: 14px; margin-right: 6px; vertical-align: middle;"></i>${detail.answer}</div>
-                                        </div>
-                                    ` : '';
-                                }).join('')}
-                            </div>
-                        `;
-                    }).join('')}
-
-                    <div class="button-group">
-                        <button class="button secondary" onclick="survey.showReview = false; survey.render()">
-                            <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                            ${this.t('backToSurvey')}
-                        </button>
-                        <button class="button" onclick="survey.showResults = true; survey.showReview = false; survey.render()">
-                            <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                            ${this.t('showResults')}
-                        </button>
-                    </div>
-                `;
-            }
-
-            renderResults() {
-                const sections = Object.keys(this.questions);
-                const overallScore = sections
-                    .reduce((sum, sec) => sum + this.calculateScore(sec), 0) / sections.length;
-
-                return `
-                    <h1 class="title">${this.t('resultsTitle')}</h1>
-                    <div class="score">
-                        ${Math.round(overallScore)}%
-                    </div>
-                    <div style="text-align: center; margin-bottom: 2rem; font-size: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted);">
-                        ${this.getScoreLabel(overallScore)}
-                    </div>
-
-                    <div class="download-buttons">
-                        <button class="button icon-button" onclick="survey.downloadJSON()">
-                            <i data-lucide="file-json" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                            JSON
-                        </button>
-                        <button class="button secondary icon-button" onclick="survey.downloadCSV()">
-                            <i data-lucide="file-spreadsheet" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                            CSV
-                        </button>
-                    </div>
-
-                    <h3>${this.t('detailedResults')}</h3>
-                    <div class="results-grid">
-                        ${sections.map(section => {
-                            const score = this.calculateScore(section);
-                            return `
-                                <div class="result-card">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                        <span style="font-weight: 600; font-size: 0.875rem;">${section}</span>
-                                        <span style="font-weight: 800; font-size: 1.25rem;">
-                                            ${Math.round(score)}%
-                                        </span>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" style="width: ${score}%;"></div>
-                                    </div>
-                                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">
-                                        ${this.getScoreLabel(score)}
-                                    </div>
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-
-                    <div class="button-group" style="justify-content: center;">
-                        <button class="button" style="max-width: 300px;" onclick="survey.reset()">
-                            <i data-lucide="rotate-ccw" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                            ${this.t('startAgain')}
-                        </button>
-                    </div>
-                `;
-            }
-
-            renderSurvey() {
-                const progress = this.calculateProgress();
-                const currentQuestions = this.questions[this.currentSection];
-
-                if (this.oneQuestionMode) {
-                    const question = currentQuestions[this.currentQuestionIndex];
-                    const allAnswered = currentQuestions.every(q => this.answers[q.id]);
-                    const sections = Object.keys(this.questions);
-                    const currentSectionIndex = sections.indexOf(this.currentSection);
-                    const totalQuestions = this.getTotalQuestions();
-                    const answeredQuestions = Object.keys(this.answers).length;
-
-                    return `
-                        ${this.renderSectionNavigator()}
-                        <h2 class="title">${this.currentSection}</h2>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: ${progress}%"></div>
-                        </div>
-                        <div style="text-align: right; font-size: 0.875rem; color: var(--text-light); margin-bottom: 1rem;">
-                            ${answeredQuestions}/${totalQuestions} ${this.t('questionsAnswered')} • ${Math.round(progress)}% ${this.t('completed')}
-                        </div>
-
-                        <div class="question">
-                            <div class="question-header">
-                                <span class="question-number">
-                                    ${this.t('question')} ${this.currentQuestionIndex + 1} ${this.t('of')} ${currentQuestions.length}
-                                </span>
-                            </div>
-                            <p style="font-weight: 500; font-size: 1.25rem; margin: 1rem 0;">
-                                ${question.text}
-                            </p>
-                            <div>
-                                ${question.options.map((option, idx) => `
-                                    <button
-                                        class="answer-btn ${this.answers[question.id] === question.scores[idx] ? 'selected' : ''}"
-                                        onclick="survey.handleAnswer('${question.id}', ${question.scores[idx]}, ${JSON.stringify(question).replace(/"/g, '&quot;')}, ${idx})">
-                                        <span style="opacity: 0.5; margin-right: 8px;">${idx + 1}.</span>${option}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-
-                        <div class="button-group">
-                            <button
-                                class="button secondary"
-                                onclick="survey.previousQuestion()"
-                                ${this.currentQuestionIndex === 0 && currentSectionIndex === 0 ? 'disabled' : ''}>
-                                <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('previous')}
-                            </button>
-                            ${currentSectionIndex === sections.length - 1 &&
-                              this.currentQuestionIndex === currentQuestions.length - 1 && allAnswered ? `
-                                <button
-                                    class="button"
-                                    onclick="survey.showResults = true; survey.showWelcome = false; survey.render()">
-                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                    ${this.t('results')}
-                                </button>
-                            ` : `
-                                <button
-                                    class="button"
-                                    onclick="survey.nextQuestion()">
-                                    ${this.t('next')}
-                                    <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px; vertical-align: middle;"></i>
-                                </button>
-                            `}
-                        </div>
-
-                        <div class="help-text">
-                            <i data-lucide="keyboard" style="width: 16px; height: 16px; margin-right: 8px; vertical-align: middle;"></i>
-                            <span class="kbd">1</span>-<span class="kbd">5</span> ${this.t('quickSelect')}
-                        </div>
-                    `;
-                } else {
-                    const allAnswered = currentQuestions.every(q => this.answers[q.id]);
-                    const sections = Object.keys(this.questions);
-                    const currentSectionIndex = sections.indexOf(this.currentSection);
-
-                    return `
-                        ${this.renderSectionNavigator()}
-                        <h2 class="title">${this.currentSection}</h2>
-                        <div class="progress">
-                            <div class="progress-bar" style="width: ${progress}%"></div>
-                        </div>
-                        <div style="text-align: right; font-size: 0.875rem; color: var(--text-light)">
-                            ${Math.round(progress)}% ${this.t('completed')}
-                        </div>
-                        ${currentQuestions.map((q, idx) => `
-                            <div class="question">
-                                <div class="question-header">
-                                    <span class="question-number">${this.t('question')} ${idx + 1} ${this.t('of')} ${currentQuestions.length}</span>
-                                </div>
-                                <p style="font-weight: 500; font-size: 1.125rem">
-                                    ${q.text}
-                                </p>
-                                <div>
-                                    ${q.options.map((option, optIdx) => `
-                                        <button
-                                            class="answer-btn ${this.answers[q.id] === q.scores[optIdx] ? 'selected' : ''}"
-                                            onclick="survey.handleAnswer('${q.id}', ${q.scores[optIdx]}, ${JSON.stringify(q).replace(/"/g, '&quot;')}, ${optIdx})">
-                                            <span style="opacity: 0.5; margin-right: 8px;">${optIdx + 1}.</span>${option}
-                                        </button>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `).join('')}
-                        <div class="button-group">
-                            <button
-                                class="button secondary"
-                                onclick="survey.previousSection()"
-                                ${currentSectionIndex === 0 ? 'disabled' : ''}>
-                                <i data-lucide="arrow-left" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                ${this.t('previousSection')}
-                            </button>
-                            ${currentSectionIndex === sections.length - 1 && allAnswered ? `
-                                <button
-                                    class="button"
-                                    onclick="survey.showResults = true; survey.showWelcome = false; survey.render()">
-                                    <i data-lucide="bar-chart-2" style="width: 18px; height: 18px; margin-right: 8px; vertical-align: middle;"></i>
-                                    ${this.t('results')}
-                                </button>
-                            ` : `
-                                <button
-                                    class="button"
-                                    onclick="survey.nextSection()"
-                                    ${!allAnswered ? 'disabled' : ''}>
-                                    ${this.t('nextSection')}
-                                    <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px; vertical-align: middle;"></i>
-                                </button>
-                            `}
-                        </div>
-                    `;
-                }
-            }
-
-            render() {
-                if (this.showWelcome) {
-                    this.app.innerHTML = this.renderWelcome();
-                } else if (this.showStatusView) {
-                    this.app.innerHTML = this.renderStatus();
-                } else if (this.showReview) {
-                    this.app.innerHTML = this.renderReview();
-                } else if (this.showResults) {
-                    this.app.innerHTML = this.renderResults();
-                } else {
-                    this.app.innerHTML = this.renderSurvey();
-                }
-                // Initialize Lucide icons
-                if (typeof lucide !== 'undefined') {
-                    lucide.createIcons();
-                }
-                // Update menu labels
-                this.updateMenuLabels();
-            }
-
-            updateMenuLabels() {
-                const labels = document.querySelectorAll('.menu-label');
-                labels.forEach(label => {
-                    const key = label.getAttribute('data-key');
-                    if (key) {
-                        label.textContent = this.t(key);
-                    }
-                });
+                data.scores[section.name] = Math.round(sectionScore(s));
+            });
+            data.overallScore = Math.round(overallScore());
+            download(JSON.stringify(data, null, 2), 'application/json', 'json');
+        }
+
+        function downloadCSV() {
+            const cell = v => `"${String(v).replace(/"/g, '""')}"`;
+            const rows = [[t('csvSection'), t('csvQuestion'), t('csvAnswer'), t('csvScore')]];
+            state.sections.forEach((section, s) => section.questions.forEach((q, i) => {
+                const v = state.answers[qid(s, i)];
+                if (v !== undefined) rows.push([section.name, q.text, q.options[v], questionScore(s, i).toFixed(2)]);
+            }));
+            rows.push([], [t('csvSummary')], [t('csvSection'), t('csvSectionScore')]);
+            state.sections.forEach((section, s) => rows.push([section.name, Math.round(sectionScore(s))]));
+            rows.push([], [t('csvOverall'), Math.round(overallScore())]);
+            const csv = '\uFEFF' + rows.map(r => r.map(cell).join(',')).join('\n');
+            download(csv, 'text/csv;charset=utf-8;', 'csv');
+        }
+
+        async function copyShareLink() {
+            const input = document.getElementById('share-link');
+            try {
+                await navigator.clipboard.writeText(input.value);
+                announce(t('copied'));
+                document.getElementById('copy-status').textContent = t('copied');
+            } catch (e) {
+                input.focus();
+                input.select();
+                document.getElementById('copy-status').textContent = t('copyFailed');
             }
         }
 
-        const survey = new Survey();
-        survey.initialize();
+        // ─── Render ───
+        function renderSectionNavigator() {
+            return `
+                <nav class="section-navigator" aria-label="${escapeHtml(t('statCategories'))}">
+                    ${state.sections.map((section, s) => {
+                        const isCurrent = s === state.sectionIdx;
+                        const cls = ['section-indicator'];
+                        if (!isCurrent && sectionProgress(s).isCompleted) cls.push('completed');
+                        return `
+                            <button class="${cls.join(' ')}" data-action="goToSection" data-section="${s}" ${isCurrent ? 'aria-current="step"' : ''}>
+                                <small>${escapeHtml(t('part'))} ${s + 1}</small>
+                                ${escapeHtml(section.name)}
+                            </button>`;
+                    }).join('')}
+                </nav>`;
+        }
 
-        // Scroll progress indicator
-        window.addEventListener('scroll', function() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            const progressBar = document.getElementById('scrollProgress');
-            if (progressBar) {
-                progressBar.style.width = scrolled + '%';
+        function renderWelcome() {
+            if (state.hasSavedData) {
+                return `
+                    <div class="welcome-screen">
+                        <h1 class="title">${escapeHtml(t('title'))}</h1>
+                        <p class="subtitle">${escapeHtml(t('savedSurveyFound'))} ${answeredCount()} ${escapeHtml(t('answersCount'))} ${escapeHtml(t('continueOrRestart'))}</p>
+                        <div class="button-group">
+                            <button class="button" data-action="continue">${icon('play')} ${escapeHtml(t('continueSurvey'))}</button>
+                            <button class="button secondary" data-action="startFresh">${icon('refresh-cw')} ${escapeHtml(t('startFresh'))}</button>
+                        </div>
+                    </div>`;
+            }
+            const total = totalQuestions();
+            return `
+                <div class="welcome-screen">
+                    <h1 class="title">${escapeHtml(t('title'))}</h1>
+                    <p class="subtitle">${escapeHtml(t('welcomeText'))}</p>
+                    <div class="button-group centered">
+                        <button class="button" data-action="start">${icon('arrow-right')} ${escapeHtml(t('startAssessment'))}</button>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item"><div class="stat-value">${total}</div><div class="stat-label">${escapeHtml(t('statQuestions'))}</div></div>
+                        <div class="stat-item"><div class="stat-value">${state.sections.length}</div><div class="stat-label">${escapeHtml(t('statCategories'))}</div></div>
+                        <div class="stat-item"><div class="stat-value">~${Math.ceil(total * MINUTES_PER_QUESTION)}</div><div class="stat-label">${escapeHtml(t('statMinutes'))}</div></div>
+                        <div class="stat-item"><div class="stat-value">2</div><div class="stat-label">${escapeHtml(t('statFormats'))}</div></div>
+                    </div>
+                    <div class="help-text">${icon('info', 'icon-sm')} ${escapeHtml(t('helpText'))}</div>
+                </div>`;
+        }
+
+        function renderConfirmRestart() {
+            return `
+                <div class="welcome-screen">
+                    <h1 class="title">${escapeHtml(t('restartTitle'))}</h1>
+                    <p class="subtitle">${escapeHtml(t('restartText'))}</p>
+                    <div class="button-group">
+                        <button class="button secondary" data-action="cancelRestart">${icon('arrow-left')} ${escapeHtml(t('restartCancel'))}</button>
+                        <button class="button" data-action="reset" id="confirm-reset">${icon('rotate-ccw')} ${escapeHtml(t('restartConfirm'))}</button>
+                    </div>
+                </div>`;
+        }
+
+        function renderSurvey() {
+            const section = state.sections[state.sectionIdx];
+            const question = section.questions[state.questionIdx];
+            const id = qid(state.sectionIdx, state.questionIdx);
+            const selected = state.answers[id];
+            const answered = answeredCount();
+            const total = totalQuestions();
+            const progress = (answered / total) * 100;
+            const isFirst = state.sectionIdx === 0 && state.questionIdx === 0;
+            const isLast = state.sectionIdx === state.sections.length - 1 && state.questionIdx === section.questions.length - 1;
+
+            return `
+                ${renderSectionNavigator()}
+                <h2 class="title">${escapeHtml(section.name)}</h2>
+                <div class="progress" role="progressbar" aria-valuenow="${Math.round(progress)}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: ${progress}%"></div>
+                </div>
+                <div class="meta-line">${answered}/${total} ${escapeHtml(t('questionsAnswered'))} • ${Math.round(progress)}% ${escapeHtml(t('completed'))}</div>
+
+                <div class="question" data-question-id="${id}">
+                    <span class="question-number">${escapeHtml(t('question'))} ${state.questionIdx + 1} ${escapeHtml(t('of'))} ${section.questions.length}</span>
+                    <p class="question-text" id="question-text">${escapeHtml(question.text)}</p>
+                    <div role="group" aria-labelledby="question-text">
+                        ${question.options.map((option, idx) => `
+                            <button class="answer-btn" data-action="answer" data-option="${idx}" aria-pressed="${selected === idx}">
+                                <span class="answer-key" aria-hidden="true">${idx + 1}.</span>${escapeHtml(option)}
+                            </button>`).join('')}
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="button secondary" data-action="prev" ${isFirst ? 'disabled' : ''}>${icon('arrow-left')} ${escapeHtml(t('previous'))}</button>
+                    ${isLast && allAnswered()
+                        ? `<button class="button" data-action="results">${icon('chart-column')} ${escapeHtml(t('results'))}</button>`
+                        : `<button class="button" data-action="next">${escapeHtml(t('next'))} ${icon('arrow-right')}</button>`}
+                </div>
+
+                <div class="help-text">
+                    ${icon('keyboard', 'icon-sm')}
+                    <span class="kbd">1</span>-<span class="kbd">${maxOptions()}</span> ${escapeHtml(t('quickSelect'))}
+                </div>`;
+        }
+
+        function renderStatus() {
+            const answered = answeredCount();
+            const total = totalQuestions();
+            const progress = (answered / total) * 100;
+            const complete = allAnswered();
+            return `
+                <h1 class="title">${escapeHtml(t('statusTitle'))}</h1>
+                <p class="subtitle">${escapeHtml(t('statusSubtitle'))}</p>
+                <div class="progress" role="progressbar" aria-valuenow="${Math.round(progress)}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: ${progress}%"></div>
+                </div>
+                <div class="meta-line">${answered}/${total} ${escapeHtml(t('questionsAnswered'))} • ${Math.round(progress)}% ${escapeHtml(t('completed'))}</div>
+
+                <div class="results-grid">
+                    ${state.sections.map((section, s) => {
+                        const p = sectionProgress(s);
+                        const status = p.isCompleted
+                            ? `${icon('circle-check', 'icon-sm')}${escapeHtml(t('categoryCompleted'))}`
+                            : p.answered > 0
+                                ? `${icon('clock', 'icon-sm')}${escapeHtml(t('inProgress'))}`
+                                : `${icon('circle', 'icon-sm')}${escapeHtml(t('notStarted'))}`;
+                        return `
+                            <button class="result-card clickable" data-action="goToSection" data-section="${s}">
+                                <div class="result-head">
+                                    <span class="result-name">${escapeHtml(section.name)}</span>
+                                    ${p.isCompleted
+                                        ? `<span class="result-value">${Math.round(sectionScore(s))}%</span>`
+                                        : `<span class="result-small">${p.answered}/${p.total}</span>`}
+                                </div>
+                                <div class="progress"><div class="progress-bar" style="width: ${p.percentage}%"></div></div>
+                                <div class="result-label">${status}</div>
+                            </button>`;
+                    }).join('')}
+                </div>
+
+                ${complete ? '' : `<p class="note">${escapeHtml(t('incompleteNote'))}</p>`}
+                <div class="button-group centered">
+                    ${complete
+                        ? `<button class="button" data-action="results">${icon('chart-column')} ${escapeHtml(t('showResults'))}</button>`
+                        : `<button class="button" data-action="continue">${icon(answered ? 'play' : 'arrow-right')} ${escapeHtml(t(answered ? 'continueAssessment' : 'startAssessment'))}</button>`}
+                </div>`;
+        }
+
+        function renderResults() {
+            const overall = overallScore();
+            const shareUrl = encodeShare();
+            return `
+                ${state.shared ? `<p class="note">${escapeHtml(t('sharedBanner'))}</p>` : ''}
+                <h1 class="title">${escapeHtml(t('resultsTitle'))}</h1>
+                <div class="score" data-overall-score="${Math.round(overall)}">${Math.round(overall)}%</div>
+                <div class="score-label">${escapeHtml(scoreLabel(overall))}</div>
+
+                <div class="download-buttons">
+                    <button class="button" data-action="downloadJSON">${icon('file-json')} JSON</button>
+                    <button class="button secondary" data-action="downloadCSV">${icon('file-spreadsheet')} CSV</button>
+                </div>
+
+                <h3>${escapeHtml(t('detailedResults'))}</h3>
+                <div class="results-grid">
+                    ${state.sections.map((section, s) => {
+                        const score = sectionScore(s);
+                        return `
+                            <div class="result-card" data-section-score="${Math.round(score)}">
+                                <div class="result-head">
+                                    <span class="result-name">${escapeHtml(section.name)}</span>
+                                    <span class="result-value">${Math.round(score)}%</span>
+                                </div>
+                                <div class="progress"><div class="progress-bar" style="width: ${score}%"></div></div>
+                                <div class="result-label">${escapeHtml(scoreLabel(score))}</div>
+                            </div>`;
+                    }).join('')}
+                </div>
+                <p class="note">${escapeHtml(t('overallNote'))}</p>
+
+                <h3>${escapeHtml(t('recommendations'))}</h3>
+                ${state.sections.map((section, s) => {
+                    const score = sectionScore(s);
+                    const band = bandFor(score);
+                    const rec = (T[state.lang].recs[s] || {})[band.rec] || '';
+                    return `
+                        <div class="recommendation-card ${band.rec}">
+                            <div class="recommendation-title">${escapeHtml(section.name)} <span class="band">· ${Math.round(score)}%, ${escapeHtml(t(band.key)).toLowerCase()}</span></div>
+                            <div>${escapeHtml(rec)}</div>
+                        </div>`;
+                }).join('')}
+
+                <h3>${escapeHtml(t('shareTitle'))}</h3>
+                <div class="share-box">
+                    <input id="share-link" type="text" readonly value="${escapeHtml(shareUrl)}" aria-label="${escapeHtml(t('shareTitle'))}">
+                    <button class="button secondary" data-action="copyLink">${icon('copy')} ${escapeHtml(t('copyLink'))}</button>
+                </div>
+                <p class="note"><span id="copy-status"></span> ${escapeHtml(t('shareNote'))}</p>
+
+                <div class="cta">
+                    <h3 style="color: inherit; margin-top: 0;">${escapeHtml(t('ctaTitle'))}</h3>
+                    <p>${escapeHtml(t('ctaText'))}</p>
+                    <a class="button" href="${CONTACT_URL}" target="_blank" rel="noopener">${icon('mail')} ${escapeHtml(t('ctaButton'))}</a>
+                </div>
+
+                <div class="button-group centered">
+                    ${state.shared
+                        ? `<button class="button secondary" data-action="startOwn">${icon('arrow-right')} ${escapeHtml(t('startOwn'))}</button>`
+                        : `<button class="button secondary" data-action="restart">${icon('rotate-ccw')} ${escapeHtml(t('startAgain'))}</button>`}
+                </div>`;
+        }
+
+        function render() {
+            const views = {
+                welcome: renderWelcome,
+                confirmRestart: renderConfirmRestart,
+                survey: renderSurvey,
+                status: renderStatus,
+                results: renderResults,
+                error: () => `<p class="subtitle">${escapeHtml(t('loadError'))}</p>`
+            };
+            appEl.innerHTML = views[state.view]();
+            appEl.dataset.view = state.view;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            document.querySelectorAll('.menu-label').forEach(el => { el.textContent = t(el.dataset.key); });
+            document.querySelectorAll('.lang-btn').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.lang === state.lang)));
+            document.documentElement.lang = state.lang;
+            document.title = t('title');
+            if (state.view === 'survey') {
+                const section = state.sections[state.sectionIdx];
+                const q = section.questions[state.questionIdx];
+                announce(`${section.name}. ${t('announceQuestion')} ${state.questionIdx + 1} ${t('of')} ${section.questions.length}: ${q.text}`);
+            }
+        }
+
+        // ─── Actions ───
+        function setView(view) { state.view = view; render(); window.scrollTo(0, 0); }
+
+        function goTo(s, i) {
+            state.sectionIdx = s;
+            state.questionIdx = i;
+            saveState();
+            setView('survey');
+        }
+
+        function nextQuestion() {
+            const qs = state.sections[state.sectionIdx].questions;
+            if (state.questionIdx < qs.length - 1) return goTo(state.sectionIdx, state.questionIdx + 1);
+            if (state.sectionIdx < state.sections.length - 1) return goTo(state.sectionIdx + 1, 0);
+            if (allAnswered()) return showResults();
+            setView('status');
+        }
+
+        function previousQuestion() {
+            if (state.questionIdx > 0) return goTo(state.sectionIdx, state.questionIdx - 1);
+            if (state.sectionIdx > 0) {
+                const prev = state.sectionIdx - 1;
+                return goTo(prev, state.sections[prev].questions.length - 1);
+            }
+        }
+
+        function answer(optionIdx) {
+            const q = state.sections[state.sectionIdx].questions[state.questionIdx];
+            if (optionIdx < 0 || optionIdx >= q.options.length) return;
+            state.answers[qid(state.sectionIdx, state.questionIdx)] = optionIdx;
+            state.hasSavedData = true;
+            saveState();
+            announce(`${t('announceSelected')} ${q.options[optionIdx]}`);
+            nextQuestion();
+        }
+
+        function showResults() {
+            if (!allAnswered()) return setView('status');
+            setView('results');
+        }
+
+        function continueSurvey() {
+            const next = firstUnanswered();
+            if (next && state.answers[qid(state.sectionIdx, state.questionIdx)] !== undefined) {
+                return goTo(next.s, next.i);
+            }
+            goTo(state.sectionIdx, state.questionIdx);
+        }
+
+        function reset() {
+            clearSavedState();
+            state.shared = false;
+            history.replaceState(null, '', location.pathname);
+            setView('welcome');
+        }
+
+        async function setLanguage(lang) {
+            if (!T[lang] || lang === state.lang) return;
+            state.lang = lang;
+            storageSet(LANG_KEY, lang);
+            try {
+                await loadQuestions();
+                render();
+            } catch (e) {
+                console.error('Error loading questions:', e);
+                setView('error');
+            }
+        }
+
+        const actions = {
+            start: () => { state.shared = false; goTo(0, 0); },
+            continue: continueSurvey,
+            startFresh: () => { clearSavedState(); render(); },
+            home: () => { state.hasSavedData = answeredCount() > 0 && !state.shared; setView('welcome'); },
+            restart: () => (answeredCount() > 0 ? setView('confirmRestart') : reset()),
+            cancelRestart: () => setView(answeredCount() > 0 ? 'survey' : 'welcome'),
+            reset,
+            status: () => setView('status'),
+            results: showResults,
+            goToSection: el => goTo(parseInt(el.dataset.section, 10), 0),
+            answer: el => answer(parseInt(el.dataset.option, 10)),
+            prev: previousQuestion,
+            next: nextQuestion,
+            downloadJSON,
+            downloadCSV,
+            copyLink: copyShareLink,
+            startOwn: () => {
+                state.shared = false;
+                history.replaceState(null, '', location.pathname);
+                state.answers = {};
+                loadSavedState();
+                validateState();
+                setView('welcome');
+            }
+        };
+
+        // ─── Listeners ───
+        document.addEventListener('click', e => {
+            const el = e.target.closest('[data-action]');
+            if (!el) return;
+            const handler = actions[el.dataset.action];
+            if (handler) handler(el);
+        });
+
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+
+        document.addEventListener('keydown', e => {
+            if (state.view !== 'survey') return;
+            if (e.altKey || e.ctrlKey || e.metaKey) return;
+            const tag = (e.target.tagName || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea') return;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                nextQuestion();
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                previousQuestion();
+            } else if (/^[1-9]$/.test(e.key)) {
+                e.preventDefault();
+                answer(parseInt(e.key, 10) - 1);
             }
         });
+
+        window.addEventListener('scroll', () => {
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
+            scrollEl.style.width = scrolled + '%';
+        });
+
+        // ─── Init ───
+        (async function init() {
+            const share = decodeShare();
+            const savedLang = storageGet(LANG_KEY);
+            state.lang = share ? share.lang : (T[savedLang] ? savedLang : 'pl');
+            if (!share) loadSavedState();
+            try {
+                await loadQuestions();
+            } catch (e) {
+                console.error('Error loading questions:', e);
+                return setView('error');
+            }
+            if (share) {
+                state.shared = true;
+                applyShare(share.digits);
+                state.view = allAnswered() ? 'results' : 'welcome';
+                if (!allAnswered()) { state.shared = false; state.answers = {}; loadSavedState(); validateState(); }
+            }
+            render();
+        })();
     </script>
 </body>
 </html>
