@@ -1,3 +1,5 @@
+window.AIREADY_QUESTIONS = window.AIREADY_QUESTIONS || {};
+window.AIREADY_QUESTIONS.en = `
 #Strategy and leadership
 Does the organisation have a written AI strategy or plan?|Yes, approved and communicated|Yes, but still a draft|Discussions are ongoing, nothing written|No
 Does leadership understand what AI is and is not suited for in your organisation?|Yes, it can name specific use cases and limits|Partly, it knows the general concepts|Its picture comes mainly from the media|The topic is absent
@@ -41,3 +43,4 @@ Are there criteria for evaluating vendor solutions (security, cost, vendor lock-
 Is there a budget for AI initiatives?|Yes, a dedicated one|Within the general IT or innovation budget|Only ad hoc funds|No
 Is the return on AI deployments measured (time, cost, quality)?|Yes, systematically|For selected deployments|No, but we plan to|No
 Is there a plan for financing AI development beyond one year?|Yes|There are general assumptions|In preparation|No
+`;

@@ -14,6 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/lucide@1.41.0/dist/umd/lucide.min.js"></script>
+    <script src="questions.pl.js"></script>
+    <script src="questions.en.js"></script>
     <style>
         :root {
             --black: #000000;
@@ -433,7 +435,6 @@
 
         const T = {
             pl: {
-                questionsFile: 'questions.txt',
                 highReadiness: 'Wysoka gotowość',
                 goodReadiness: 'Dobra gotowość',
                 mediumReadiness: 'Średnia gotowość',
@@ -505,7 +506,7 @@
                 restartText: 'Wszystkie odpowiedzi zostaną usunięte.',
                 restartConfirm: 'Tak, usuń odpowiedzi',
                 restartCancel: 'Anuluj',
-                loadError: 'Nie udało się wczytać pytań. Odśwież stronę.',
+                loadError: 'Nie udało się wczytać pytań. Sprawdź, czy pliki questions.pl.js i questions.en.js leżą obok index.html.',
 
                 recs: [
                     {
@@ -541,7 +542,6 @@
                 ]
             },
             en: {
-                questionsFile: 'questions_en.txt',
                 highReadiness: 'High readiness',
                 goodReadiness: 'Good readiness',
                 mediumReadiness: 'Medium readiness',
@@ -613,7 +613,7 @@
                 restartText: 'All answers will be deleted.',
                 restartConfirm: 'Yes, delete answers',
                 restartCancel: 'Cancel',
-                loadError: 'Could not load the questions. Please refresh the page.',
+                loadError: 'Could not load the questions. Check that questions.pl.js and questions.en.js sit next to index.html.',
 
                 recs: [
                     {
@@ -693,10 +693,10 @@
             return sections;
         }
 
-        async function loadQuestions() {
-            const response = await fetch(t('questionsFile'));
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            state.sections = parseQuestions(await response.text());
+        function loadQuestions() {
+            const text = (window.AIREADY_QUESTIONS || {})[state.lang];
+            if (!text) throw new Error(`questions.${state.lang}.js did not load`);
+            state.sections = parseQuestions(text);
             if (!state.sections.length) throw new Error('No sections parsed');
             validateState();
         }
@@ -1153,12 +1153,12 @@
             setView('welcome');
         }
 
-        async function setLanguage(lang) {
+        function setLanguage(lang) {
             if (!T[lang] || lang === state.lang) return;
             state.lang = lang;
             storageSet(LANG_KEY, lang);
             try {
-                await loadQuestions();
+                loadQuestions();
                 render();
             } catch (e) {
                 console.error('Error loading questions:', e);
@@ -1228,13 +1228,13 @@
         });
 
         // ─── Init ───
-        (async function init() {
+        (function init() {
             const share = decodeShare();
             const savedLang = storageGet(LANG_KEY);
             state.lang = share ? share.lang : (T[savedLang] ? savedLang : 'pl');
             if (!share) loadSavedState();
             try {
-                await loadQuestions();
+                loadQuestions();
             } catch (e) {
                 console.error('Error loading questions:', e);
                 return setView('error');

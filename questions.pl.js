@@ -1,3 +1,5 @@
+window.AIREADY_QUESTIONS = window.AIREADY_QUESTIONS || {};
+window.AIREADY_QUESTIONS.pl = `
 #Strategia i przywództwo
 Czy organizacja ma spisaną strategię lub plan wykorzystania AI?|Tak, zatwierdzony i zakomunikowany|Tak, ale w wersji roboczej|Trwają rozmowy, nic nie spisano|Nie
 Czy kierownictwo rozumie, do czego AI nadaje się w Waszej organizacji, a do czego nie?|Tak, potrafi wskazać konkretne zastosowania i ograniczenia|Częściowo, zna ogólne pojęcia|Ma wyobrażenie głównie z mediów|Temat nie jest obecny
@@ -41,3 +43,4 @@ Czy istnieją kryteria oceny rozwiązań od dostawców (bezpieczeństwo, koszty,
 Czy jest budżet na inicjatywy AI?|Tak, dedykowany|W ramach ogólnego budżetu IT lub innowacji|Tylko środki doraźne|Nie
 Czy mierzony jest zwrot z wdrożeń AI (czas, koszty, jakość)?|Tak, systematycznie|Dla wybranych wdrożeń|Nie, ale planujemy|Nie
 Czy jest plan finansowania rozwoju AI na dłużej niż rok?|Tak|Są ogólne założenia|W przygotowaniu|Nie
+`;
