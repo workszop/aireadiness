@@ -7,3 +7,4 @@ Self-assessment of an organisation's readiness to adopt AI. Live at https://read
 - Scoring: each answer is normalised to 0-1 (top option 1, bottom option 0). Area score is the mean of its questions, overall score is the mean of all questions.
 - Results include per-area recommendations, CSV/JSON export and a shareable link that encodes the answers in the URL hash.
 - Single `index.html`, no build step. Progress is kept in localStorage. Works when opened directly from disk.
+- Styled with the Quantica Lab website design system (`qweb`): Satoshi + Geist Mono, ink-navy hero and panels, quantica pink as the only primary, bento cells, pill buttons. Logos in `assets/`.

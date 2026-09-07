@@ -9,414 +9,407 @@
     <meta property="og:description" content="32 pytania w 6 obszarach. Sprawdź, na ile Twoja organizacja jest gotowa na AI, i otrzymaj rekomendacje.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ready.warsztaty-ai.com/">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Cpath d='M9 22l4-12h2l4 12h-2.2l-1-3h-3.6l-1 3H9zm4-5h2.8L14.4 12.6 13 17zm9-7h2v12h-2V10z' fill='%23fff'/%3E%3C/svg%3E">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0A1F2C">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23d20757'/%3E%3Cpath d='M9 22l4-12h2l4 12h-2.2l-1-3h-3.6l-1 3H9zm4-5h2.8L14.4 12.6 13 17zm9-7h2v12h-2V10z' fill='%23fff'/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/lucide@1.41.0/dist/umd/lucide.min.js"></script>
     <script src="questions.pl.js"></script>
     <script src="questions.en.js"></script>
     <style>
+        /* ─── qweb tokens (Quantica Lab website design system) ─── */
+        @import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap");
+
         :root {
-            --black: #000000;
-            --white: #ffffff;
-            --gray-50: #fafafa;
-            --gray-100: #f5f5f5;
-            --gray-200: #e5e5e5;
-            --gray-300: #d4d4d4;
-            --gray-600: #525252;
-            --gray-800: #262626;
-            --gray-900: #171717;
-            --text-primary: var(--black);
-            --text-secondary: var(--gray-600);
-            --text-muted: #6b6b6b;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-mono: 'SF Mono', 'Monaco', monospace;
+            --quantica-pink:    #d20757;
+            --rose-pink:        #d20757;
+            --deep-berry:       #8A004C;
+            --magenta-tint:     #FFE6F1;
+            --violet-primary:   #7030A0;
+            --violet-deep:      #4F1F75;
+            --ink:              #0A1F2C;
+            --mist:             #F4EEFA;
+            --near-black:       #111111;
+            --white:            #FFFFFF;
+
+            --fg-1:             #111111;
+            --fg-2:             #111111;
+            --fg-3:             #4B5563;
+            --bg-1:             #FFFFFF;
+            --bg-2:             #F5F6F8;
+            --border-1:         #E6E8EC;
+            --border-2:         #D1D5DB;
+
+            --font-display:     "Satoshi", system-ui, -apple-system, sans-serif;
+            --font-sans:        "Satoshi", system-ui, -apple-system, sans-serif;
+            --font-mono:        "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+            --radius-sm:        6px;
+            --radius-md:        10px;
+            --radius-lg:        16px;
+            --radius-card:      18px;
+
+            --shadow-pink-soft: 0 6px 18px rgba(210, 7, 87, 0.10);
+            --shadow-card:      0 10px 30px -12px rgba(10, 20, 40, 0.12);
+
+            --pink-a03:         rgba(210, 7, 87, 0.03);
+            --pink-a07:         rgba(210, 7, 87, 0.07);
+            --pink-a45:         rgba(210, 7, 87, 0.45);
+            --white-a16:        rgba(255, 255, 255, 0.16);
+            --white-a85:        rgba(255, 255, 255, 0.85);
+            --white-a92:        rgba(255, 255, 255, 0.92);
+
+            --nav-h: 64px;
+            --content-w: 1120px;
+            --narrow-w: 860px;
         }
-        * { box-sizing: border-box; }
+
+        /* ─── Base ─── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 12px); }
         body {
             font-family: var(--font-sans);
-            margin: 0;
-            padding: 0;
-            background: var(--white);
-            color: var(--text-primary);
+            color: var(--fg-2);
+            background: var(--bg-1);
             line-height: 1.6;
-            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
-        }
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip: rect(0 0 0 0);
-            white-space: nowrap;
-        }
-
-        /* ─── Scroll progress ─── */
-        .scroll-indicator {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: var(--gray-100);
-            z-index: 9999;
-        }
-        .scroll-progress {
-            height: 100%;
-            background: var(--black);
-            width: 0%;
-            transition: width 0.1s ease;
-        }
-
-        /* ─── Layout ─── */
-        .card {
-            background: var(--white);
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 80px 40px;
+            text-rendering: optimizeLegibility;
             min-height: 100vh;
-            animation: fadeIn 0.4s ease;
         }
-        .title {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            color: var(--black);
-            letter-spacing: -0.03em;
-            line-height: 1.1;
+        img { max-width: 100%; }
+        a { color: var(--quantica-pink); }
+        button { font-family: inherit; }
+        .wrap { max-width: var(--content-w); margin: 0 auto; padding: 0 28px; }
+        .wrap-narrow { max-width: var(--narrow-w); }
+        .icon { width: 18px; height: 18px; stroke-width: 2; flex: none; }
+        .visually-hidden {
+            position: absolute; width: 1px; height: 1px; overflow: hidden;
+            clip: rect(0 0 0 0); white-space: nowrap;
         }
-        .subtitle {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            margin: 0 auto 2.5rem;
-            line-height: 1.7;
-            max-width: 560px;
-        }
-        h3 {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin: 3rem 0 1rem;
-        }
-        .meta-line {
-            text-align: right;
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-        .progress {
-            height: 4px;
-            background: var(--gray-100);
-            border-radius: 2px;
-            margin: 1.5rem 0;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            background: var(--black);
-            border-radius: 2px;
-            transition: width 0.4s ease;
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity 600ms ease, transform 600ms ease; }
+        .reveal.visible { opacity: 1; transform: none; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .reveal { opacity: 1; transform: none; transition: none; }
+            * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
         }
 
-        /* ─── Question ─── */
-        .question {
-            margin: 3rem 0;
-            animation: fadeIn 0.3s ease;
+        /* ─── Nav ─── */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--nav-h); z-index: 40;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-1);
         }
-        .question-number {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+        .nav-inner {
+            max-width: var(--content-w); margin: 0 auto; padding: 0 28px; height: 100%;
+            display: flex; align-items: center; justify-content: space-between; gap: 20px;
         }
+        .nav-logo img { height: 30px; width: auto; display: block; }
+        .nav-links { display: flex; align-items: center; gap: 22px; }
+        .nav-link {
+            background: none; border: 0; cursor: pointer;
+            font-size: 13.5px; font-weight: 500; color: var(--fg-1);
+            letter-spacing: 0.01em; display: inline-flex; align-items: center; gap: 7px;
+            padding: 6px 0; transition: color 200ms;
+        }
+        .nav-link:hover, .nav-link[aria-current="page"] { color: var(--quantica-pink); }
+        .nav-link:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 3px; border-radius: 4px; }
+        .nav-link .icon { width: 15px; height: 15px; }
+        .lang-toggle {
+            display: flex; border: 1px solid var(--border-1); border-radius: 999px; overflow: hidden;
+            font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+        }
+        .lang-btn {
+            padding: 6px 12px; border: 0; background: none; cursor: pointer;
+            color: var(--fg-3); font-family: inherit; font-weight: 500; transition: background 200ms, color 200ms;
+        }
+        .lang-btn:hover { color: var(--quantica-pink); }
+        .lang-btn[aria-pressed="true"] { background: var(--quantica-pink); color: var(--white); }
+        .lang-btn:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: -2px; }
+
+        /* ─── Hero (welcome) ─── */
+        .hero {
+            position: relative; display: flex; align-items: center;
+            color: var(--white); padding: calc(var(--nav-h) + 72px) 0 84px;
+            background: var(--ink); overflow: hidden;
+        }
+        canvas[data-dots] { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+        .hero-q {
+            position: absolute; right: -6%; top: 50%; transform: translateY(-50%);
+            width: min(40vw, 520px); opacity: 0.16; pointer-events: none;
+        }
+        .hero-q img { width: 100%; display: block; }
+        .hero-inner { position: relative; z-index: 2; }
+        .hero-eyebrow {
+            font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+            letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose-pink); margin-bottom: 22px;
+        }
+        .hero-title {
+            font-family: var(--font-display); font-weight: 700;
+            font-size: clamp(48px, 7.5vw, 104px);
+            line-height: 0.98; letter-spacing: -0.03em; color: var(--white);
+        }
+        .hero-title em { font-style: normal; color: var(--rose-pink); }
+        .hero-tagline {
+            font-size: clamp(17px, 2vw, 21px); line-height: 1.6;
+            color: var(--white-a92); max-width: 680px; margin-top: 24px;
+        }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
+        .hero-footer {
+            position: absolute; bottom: 22px; left: 0; right: 0; z-index: 2;
+            display: flex; justify-content: space-between;
+            font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
+            color: var(--white-a85);
+        }
+
+        /* ─── Pills ─── */
+        .pill {
+            font-family: var(--font-sans); font-weight: 700; font-size: 14px;
+            text-decoration: none; padding: 13px 28px; border-radius: 999px; border: 0;
+            display: inline-flex; align-items: center; justify-content: center; gap: 9px; cursor: pointer;
+            transition: transform 200ms, background 200ms, color 200ms, border-color 200ms;
+        }
+        .pill:hover:not(:disabled) { transform: translateY(-1px); }
+        .pill:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 3px; }
+        .pill:disabled { opacity: 0.35; cursor: not-allowed; }
+        .pill-solid { background: var(--quantica-pink); color: var(--white); box-shadow: var(--shadow-pink-soft); }
+        .pill-solid:hover:not(:disabled) { background: var(--deep-berry); }
+        .pill-outline { border: 1.5px solid var(--white); color: var(--white); background: transparent; }
+        .pill-outline:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+        .pill-ghost { border: 1.5px solid var(--border-2); color: var(--fg-1); background: var(--bg-1); }
+        .pill-ghost:hover:not(:disabled) { border-color: var(--quantica-pink); color: var(--quantica-pink); }
+        .pill .icon { width: 17px; height: 17px; }
+        .pill-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+        .pill-row.between { justify-content: space-between; }
+
+        /* ─── Sections ─── */
+        .section { padding: 88px 0; }
+        .section-page { padding-top: calc(var(--nav-h) + 56px); }
+        .section-alt { background: var(--bg-2); }
+        .h-section {
+            font-family: var(--font-display); font-weight: 700;
+            font-size: clamp(28px, 4vw, 42px); line-height: 1.08;
+            letter-spacing: -0.025em; color: var(--fg-1); margin-bottom: 14px;
+        }
+        .h-pink { color: var(--quantica-pink); }
+        .lead { font-size: 15.5px; line-height: 1.75; margin-bottom: 14px; max-width: 780px; color: var(--fg-3); }
+        .eyebrow {
+            font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+            letter-spacing: 0.12em; text-transform: uppercase; color: var(--quantica-pink); margin-bottom: 14px;
+        }
+        .meta {
+            font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em;
+            text-transform: uppercase; color: var(--fg-3);
+        }
+        .progress-row { display: flex; align-items: center; gap: 16px; margin: 26px 0 30px; }
+        .progress-row .progress { flex: 1; }
+        .progress { height: 6px; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--quantica-pink); border-radius: 999px; transition: width 400ms ease; }
+
+        /* ─── Bento ─── */
+        .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 26px; }
+        .cell {
+            background: var(--bg-1); border: 1px solid var(--border-1); border-radius: var(--radius-card);
+            padding: 30px 32px; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-card); transition: border-color 250ms, background 250ms;
+            text-align: left; color: var(--fg-2);
+        }
+        .cell:hover { border-color: var(--pink-a45); background: var(--pink-a03); }
+        .cell-2 { grid-column: span 2; }
+        .cell-3 { grid-column: span 3; }
+        .cell-6 { grid-column: span 6; }
+        .cell-btn { cursor: pointer; width: 100%; }
+        .cell-btn:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 3px; }
+        .cell-tag {
+            font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+            letter-spacing: 0.12em; text-transform: uppercase; color: var(--quantica-pink);
+            margin-bottom: 18px; display: flex; align-items: center;
+            justify-content: space-between; gap: 10px;
+        }
+        .cell-tag .icon { width: 19px; height: 19px; color: var(--quantica-pink); }
+        .cell h3 {
+            font-family: var(--font-display); font-weight: 700; font-size: 20px;
+            letter-spacing: -0.015em; color: var(--fg-1); margin-bottom: 10px;
+        }
+        .cell p { font-size: 14.5px; line-height: 1.7; margin: 0; }
+        .stat-value {
+            font-family: var(--font-display); font-weight: 900; font-size: 44px;
+            letter-spacing: -0.03em; line-height: 1; color: var(--fg-1); margin-bottom: 8px;
+        }
+        .stat-label { color: var(--fg-3); }
+        .start-cell {
+            border: 1.5px solid var(--quantica-pink); background: rgba(210, 7, 87, 0.04);
+            box-shadow: var(--shadow-pink-soft); flex-direction: row; flex-wrap: wrap;
+            align-items: center; justify-content: space-between; gap: 26px;
+        }
+        .start-cell:hover { border-color: var(--quantica-pink); background: var(--pink-a07); }
+        .start-text { flex: 1 1 420px; }
+        .start-cell h3 { font-size: clamp(22px, 3vw, 28px); margin-bottom: 8px; }
+        .start-cell p { font-size: 15px; }
+
+        /* ─── Survey ─── */
+        .steps { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+        .step {
+            font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.08em;
+            text-transform: uppercase; border: 1px solid var(--border-1); border-radius: 999px;
+            padding: 8px 14px; background: var(--bg-1); color: var(--fg-3); cursor: pointer;
+            display: inline-flex; align-items: center; gap: 7px;
+            transition: background 200ms, color 200ms, border-color 200ms;
+        }
+        .step:hover { border-color: var(--quantica-pink); color: var(--quantica-pink); }
+        .step:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 2px; }
+        .step .icon { width: 13px; height: 13px; }
+        .step.completed { background: var(--magenta-tint); color: var(--quantica-pink); border-color: transparent; }
+        .step[aria-current="step"] { background: var(--quantica-pink); color: var(--white); border-color: var(--quantica-pink); }
+        .question-cell:hover { border-color: var(--border-1); background: var(--bg-1); }
         .question-text {
-            font-weight: 500;
-            font-size: 1.25rem;
-            margin: 1rem 0;
+            font-family: var(--font-display); font-weight: 700; font-size: clamp(20px, 2.6vw, 26px);
+            letter-spacing: -0.02em; line-height: 1.25; color: var(--fg-1); margin: 0 0 22px;
         }
+        .answers { display: flex; flex-direction: column; gap: 10px; }
         .answer-btn {
-            background: var(--white);
-            color: var(--black);
-            border: 2px solid var(--gray-300);
-            padding: 16px 48px 16px 32px;
-            border-radius: 0;
-            cursor: pointer;
-            width: 100%;
-            margin: 8px 0;
-            text-align: left;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
-            position: relative;
+            width: 100%; text-align: left; cursor: pointer;
+            border: 1.5px solid var(--border-2); border-radius: var(--radius-md);
+            padding: 14px 18px; background: var(--bg-1); color: var(--fg-1);
+            font-size: 15px; font-weight: 500; line-height: 1.45;
+            display: flex; align-items: center; gap: 14px;
+            transition: border-color 200ms, background 200ms, transform 200ms;
         }
-        .answer-btn:hover { background: var(--gray-100); border-color: var(--gray-600); transform: translateX(4px); }
-        .answer-btn:active { background: var(--gray-200); }
-        .answer-btn:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
-        .answer-btn[aria-pressed="true"] { background: var(--black); color: var(--white); border-color: var(--black); }
-        .answer-btn[aria-pressed="true"]:hover { background: var(--gray-800); border-color: var(--gray-800); transform: none; }
-        .answer-btn[aria-pressed="true"]::after {
-            content: '✓';
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-weight: 600;
+        .answer-btn:hover { border-color: var(--pink-a45); background: var(--pink-a03); transform: translateX(3px); }
+        .answer-btn:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 2px; }
+        .answer-btn[aria-pressed="true"] { border-color: var(--quantica-pink); background: var(--magenta-tint); transform: none; }
+        .answer-key {
+            flex: none; width: 26px; height: 26px; border-radius: 999px;
+            border: 1px solid var(--border-2); display: inline-flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono); font-size: 11px; color: var(--fg-3);
         }
-        .answer-key { opacity: 0.5; margin-right: 8px; }
-
-        /* ─── Buttons ─── */
-        .button {
-            background: var(--black);
-            color: var(--white);
-            border: 2px solid var(--black);
-            padding: 16px 32px;
-            border-radius: 0;
-            cursor: pointer;
-            width: 100%;
-            margin: 8px 0;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background 0.2s ease, border-color 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-        .button:hover:not(:disabled) { background: var(--gray-800); border-color: var(--gray-800); }
-        .button:active:not(:disabled) { background: var(--gray-900); }
-        .button:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
-        .button:disabled { opacity: 0.3; cursor: not-allowed; }
-        .button.secondary { background: var(--white); color: var(--black); }
-        .button.secondary:hover:not(:disabled) { background: var(--gray-50); border-color: var(--black); }
-        .button-group { display: flex; gap: 16px; margin-top: 3rem; }
-        .button-group .button { flex: 1; }
-        .button-group.centered { justify-content: center; }
-        .button-group.centered .button { max-width: 300px; }
-        .icon { width: 18px; height: 18px; flex: none; }
-        .icon-sm { width: 12px; height: 12px; vertical-align: middle; margin-right: 4px; }
-
-        /* ─── Section navigator ─── */
-        .section-navigator {
-            display: flex;
-            gap: 2px;
-            margin-bottom: 3rem;
-            background: var(--gray-200);
-        }
-        .section-indicator {
-            flex: 1;
-            min-width: 0;
-            padding: 12px 8px;
-            text-align: center;
-            font-family: inherit;
-            font-size: 0.55rem;
-            background: var(--white);
-            color: var(--text-muted);
-            border: none;
-            transition: background 0.2s ease, color 0.2s ease;
-            cursor: pointer;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            line-height: 1.4;
-        }
-        .section-indicator small { display: block; font-size: 0.7rem; opacity: 0.8; }
-        .section-indicator:hover { background: var(--gray-50); color: var(--text-primary); }
-        .section-indicator:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
-        .section-indicator[aria-current="step"] { background: var(--black); color: var(--white); }
-        .section-indicator.completed { background: var(--gray-100); color: var(--text-primary); }
-
-        /* ─── Results and status ─── */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1px;
-            background: var(--gray-200);
-            margin: 2rem 0;
-        }
-        .result-card { padding: 2rem; background: var(--white); }
-        .result-card.clickable { cursor: pointer; border: none; text-align: left; font-family: inherit; width: 100%; }
-        .result-card.clickable:hover { background: var(--gray-50); }
-        .result-card.clickable:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
-        .result-head { display: flex; justify-content: space-between; margin-bottom: 0.5rem; gap: 1rem; }
-        .result-name { font-weight: 600; font-size: 0.875rem; }
-        .result-value { font-weight: 800; font-size: 1.25rem; }
-        .result-small { font-size: 0.75rem; color: var(--text-muted); }
-        .result-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .score {
-            font-size: 4rem;
-            font-weight: 800;
-            text-align: center;
-            letter-spacing: -0.03em;
-            color: var(--black);
-        }
-        .score-label {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-        }
-        .recommendation-card {
-            margin: 1rem 0;
-            padding: 1.5rem;
-            border-left: 4px solid var(--black);
-            background: var(--gray-50);
-        }
-        .recommendation-card.medium { border-left-color: var(--gray-300); }
-        .recommendation-card.low { border-left-color: var(--gray-200); }
-        .recommendation-title { font-weight: 600; margin-bottom: 0.25rem; }
-        .recommendation-title .band { color: var(--text-muted); font-weight: 500; }
-        .download-buttons { display: flex; flex-wrap: wrap; gap: 16px; margin: 2rem 0; justify-content: center; }
-        .download-buttons .button { width: auto; min-width: 120px; }
-        .share-box { display: flex; gap: 8px; margin: 1rem 0; }
-        .share-box input {
-            flex: 1;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            padding: 12px;
-            border: 1px solid var(--gray-300);
-            background: var(--gray-50);
-            min-width: 0;
-        }
-        .share-box .button { width: auto; margin: 0; }
-        .cta {
-            margin: 3rem 0 0;
-            padding: 2rem;
-            background: var(--black);
-            color: var(--white);
-        }
-        .cta p { margin: 0 0 1rem; }
-        .cta .button { background: var(--white); color: var(--black); border-color: var(--white); width: auto; }
-        .cta .button:hover { background: var(--gray-100); border-color: var(--gray-100); }
-        .note {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-top: 1rem;
-            text-align: center;
-        }
-
-        /* ─── Welcome ─── */
-        .welcome-screen { text-align: center; }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--gray-200);
-            margin: 4rem 0;
-            border: 1px solid var(--gray-200);
-        }
-        .stat-item { padding: 2rem 1rem; background: var(--gray-50); text-align: center; }
-        .stat-value { font-size: 2rem; font-weight: 800; color: var(--black); letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-        .stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
-        .help-text {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-top: 3rem;
-            padding: 1.5rem;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            text-align: center;
-        }
+        .answer-btn[aria-pressed="true"] .answer-key { background: var(--quantica-pink); border-color: var(--quantica-pink); color: var(--white); }
+        .answer-text { flex: 1; }
+        .answer-btn .icon-check { color: var(--quantica-pink); }
+        .kbd-hint { margin-top: 22px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .kbd {
-            background: var(--gray-100);
-            border: 1px solid var(--gray-300);
-            border-radius: 4px;
-            padding: 2px 8px;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-family: var(--font-mono); font-size: 11px; padding: 2px 8px;
+            border: 1px solid var(--border-2); border-radius: var(--radius-sm); background: var(--bg-2); color: var(--fg-1);
         }
 
-        /* ─── Fixed chrome ─── */
-        .top-menu, .language-switcher {
-            position: fixed;
-            top: 24px;
-            z-index: 1000;
-            display: flex;
-            gap: 0;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
+        /* ─── Dark panels (score, contact) ─── */
+        .dark-panel {
+            background:
+                radial-gradient(ellipse 70% 60% at 80% 50%, rgba(112, 48, 160, 0.28) 0%, transparent 65%),
+                radial-gradient(ellipse 50% 70% at 0% 0%, rgba(210, 7, 87, 0.30) 0%, transparent 65%),
+                linear-gradient(135deg, var(--ink) 0%, #0d2538 100%);
+            color: var(--white); padding: 52px 56px; border-radius: var(--radius-lg);
+            position: relative; overflow: hidden;
         }
-        .top-menu { left: 24px; }
-        .language-switcher { right: 24px; }
-        .menu-btn, .lang-btn {
-            padding: 8px 16px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            transition: background 0.2s ease, color 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .dark-panel > * { position: relative; z-index: 1; }
+        .panel-q {
+            position: absolute; right: -50px; top: 50%; transform: translateY(-50%);
+            width: 280px; opacity: 0.14; pointer-events: none; z-index: 0;
         }
-        .menu-btn:hover, .lang-btn:hover { background: var(--gray-50); color: var(--text-primary); }
-        .menu-btn:focus-visible, .lang-btn:focus-visible { outline: 2px solid var(--black); outline-offset: -2px; }
-        .lang-btn[aria-pressed="true"] { background: var(--black); color: var(--white); }
-        .menu-btn:not(:last-child) { border-right: 1px solid var(--gray-200); }
-        .menu-btn .icon { width: 14px; height: 14px; }
+        .panel-label {
+            font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+            letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose-pink); margin-bottom: 14px;
+        }
+        .dark-panel h2 {
+            color: var(--white); font-family: var(--font-display);
+            font-size: clamp(26px, 3.4vw, 36px); font-weight: 700; margin-bottom: 14px;
+            letter-spacing: -0.025em; line-height: 1.1;
+        }
+        .dark-panel p { color: var(--white-a92); font-size: 15px; margin-bottom: 26px; max-width: 560px; }
+        .dark-panel .pill-solid { background: var(--white); color: var(--quantica-pink); }
+        .dark-panel .pill-solid:hover:not(:disabled) { background: var(--magenta-tint); }
+        .dark-panel .pill-row { margin-top: 0; margin-bottom: 30px; }
+        .score-big {
+            font-family: var(--font-display); font-weight: 900;
+            font-size: clamp(72px, 12vw, 132px); line-height: 0.95; letter-spacing: -0.04em; color: var(--white);
+        }
+        .score-big em { font-style: normal; color: var(--rose-pink); }
+        .score-band {
+            font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--white-a85); margin: 14px 0 30px;
+        }
+        .panel-info {
+            display: flex; flex-wrap: wrap; gap: 34px; align-items: flex-start;
+            border-top: 1px solid var(--white-a16); padding-top: 22px;
+        }
+        .panel-meta { font-size: 13px; line-height: 1.7; color: var(--white); max-width: 560px; }
+        .panel-meta a { color: var(--white); }
+        .panel-logo img { height: 40px; width: auto; display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* ─── Results ─── */
+        .result-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+        .result-value { font-family: var(--font-display); font-weight: 900; font-size: 32px; letter-spacing: -0.03em; color: var(--fg-1); line-height: 1; }
+        .result-label { margin-top: 12px; display: flex; align-items: center; gap: 6px; }
+        .result-label .icon { width: 14px; height: 14px; }
+        .share-box { display: flex; gap: 10px; margin-top: 8px; }
+        .share-box input {
+            flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 12px; padding: 12px 14px;
+            border: 1px solid var(--border-2); border-radius: var(--radius-md); background: var(--bg-2); color: var(--fg-1);
+        }
+        .share-box input:focus-visible { outline: 2px solid var(--quantica-pink); outline-offset: 1px; }
+        .note { font-size: 14px; color: var(--fg-3); margin-top: 12px; }
+        .banner {
+            font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase;
+            background: var(--mist); border: 1.5px solid var(--violet-primary); border-radius: var(--radius-md);
+            padding: 12px 16px; margin-bottom: 26px; color: var(--violet-deep);
+        }
 
+        /* ─── Footer ─── */
+        .footer {
+            padding: 26px 0; border-top: 1px solid var(--border-1);
+            font-family: var(--font-mono); font-size: 11.5px;
+            letter-spacing: 0.04em; color: var(--fg-3);
+        }
+        .footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+        @media (max-width: 900px) { .cell-2, .cell-3 { grid-column: span 6; } }
         @media (max-width: 768px) {
-            .card { padding: 72px 20px 40px; }
-            .title { font-size: 2rem; }
-            .button-group { flex-direction: column; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .section-navigator { gap: 1px; flex-wrap: wrap; }
-            .section-indicator { min-width: 33%; padding: 8px 6px; font-size: 0.45rem; }
-            .top-menu { left: 10px; top: 10px; }
-            .language-switcher { right: 10px; top: 10px; }
-            .menu-btn, .lang-btn { padding: 6px 10px; font-size: 0.65rem; }
-            .results-grid { grid-template-columns: 1fr; }
+            .wrap { padding: 0 20px; }
+            .nav-inner { padding: 0 20px; gap: 12px; }
+            .nav-links { gap: 14px; }
+            .nav-link .nav-label { display: none; }
+            .nav-link .icon { width: 18px; height: 18px; }
+            .hero { padding: calc(var(--nav-h) + 56px) 0 96px; }
+            .hero-q { width: 70vw; right: -18%; opacity: 0.12; }
+            .section { padding: 60px 0; }
+            .section-page { padding-top: calc(var(--nav-h) + 36px); }
+            .cell { padding: 24px 22px; }
+            .dark-panel { padding: 34px 24px; }
+            .pill-row .pill { flex: 1 1 auto; }
             .share-box { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <nav class="top-menu" id="top-menu" aria-label="Menu">
-        <button class="menu-btn" id="menu-home" data-action="home">
-            <i data-lucide="home" class="icon" aria-hidden="true"></i>
-            <span class="menu-label" data-key="menuHome">Start</span>
-        </button>
-        <button class="menu-btn" id="menu-restart" data-action="restart">
-            <i data-lucide="rotate-ccw" class="icon" aria-hidden="true"></i>
-            <span class="menu-label" data-key="menuRestart">Od nowa</span>
-        </button>
-        <button class="menu-btn" id="menu-status" data-action="status">
-            <i data-lucide="chart-column" class="icon" aria-hidden="true"></i>
-            <span class="menu-label" data-key="menuStatus">Status</span>
-        </button>
+    <nav class="nav" aria-label="Menu">
+        <div class="nav-inner">
+            <a class="nav-logo" href="https://quanticalab.ai" target="_blank" rel="noopener"><img src="assets/quantica-logo-color.png" alt="Quantica Lab" width="72" height="30"></a>
+            <div class="nav-links">
+                <button class="nav-link" id="menu-home" data-action="home">
+                    <i data-lucide="home" class="icon" aria-hidden="true"></i>
+                    <span class="nav-label" data-key="menuHome">Start</span>
+                </button>
+                <button class="nav-link" id="menu-status" data-action="status">
+                    <i data-lucide="chart-column" class="icon" aria-hidden="true"></i>
+                    <span class="nav-label" data-key="menuStatus">Status</span>
+                </button>
+                <button class="nav-link" id="menu-restart" data-action="restart">
+                    <i data-lucide="rotate-ccw" class="icon" aria-hidden="true"></i>
+                    <span class="nav-label" data-key="menuRestart">Od nowa</span>
+                </button>
+                <div class="lang-toggle" role="group" aria-label="Language">
+                    <button class="lang-btn" id="lang-pl" data-lang="pl" aria-pressed="true" lang="pl">PL</button>
+                    <button class="lang-btn" id="lang-en" data-lang="en" aria-pressed="false" lang="en">EN</button>
+                </div>
+            </div>
+        </div>
     </nav>
 
-    <div class="language-switcher" role="group" aria-label="Language">
-        <button class="lang-btn" id="lang-pl" data-lang="pl" aria-pressed="true" lang="pl">PL</button>
-        <button class="lang-btn" id="lang-en" data-lang="en" aria-pressed="false" lang="en">EN</button>
-    </div>
-
-    <div class="scroll-indicator" aria-hidden="true">
-        <div class="scroll-progress" id="scrollProgress"></div>
-    </div>
-
-    <main id="app" class="card"></main>
+    <main id="app"></main>
+    <footer class="footer">
+        <div class="wrap"><div>quanticalab.ai</div><div data-key="footerTag">AI dla organizacji</div></div>
+    </footer>
     <div id="live" class="visually-hidden" aria-live="polite"></div>
 
     <script>
@@ -424,7 +417,9 @@
         const STORAGE_KEY = 'aiready_v2';
         const LANG_KEY = 'aiready_language';
         const MINUTES_PER_QUESTION = 0.5;
-        const CONTACT_URL = 'https://warsztaty-ai.com';
+        const CONTACT_EMAIL = 'kontakt@quanticalab.ai';
+        const BRAND_URL = 'https://quanticalab.ai';
+        const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const BANDS = [
             { min: 80, key: 'highReadiness', rec: 'high' },
             { min: 60, key: 'goodReadiness', rec: 'high' },
@@ -432,7 +427,9 @@
             { min: 20, key: 'lowReadiness', rec: 'low' },
             { min: 0, key: 'veryLowReadiness', rec: 'low' }
         ];
+        const AREA_ICONS = ['compass', 'shield-check', 'database', 'users', 'server', 'rocket'];
 
+        // Keys ending in Html are trusted constants rendered without escaping (one pink accent word).
         const T = {
             pl: {
                 highReadiness: 'Wysoka gotowość',
@@ -442,7 +439,11 @@
                 veryLowReadiness: 'Bardzo niska gotowość',
 
                 title: 'Ocena gotowości AI',
+                titleHtml: 'Ocena <em>gotowości</em> AI',
+                heroEyebrow: 'Samoocena organizacji',
+                footerTag: 'AI dla organizacji',
                 welcomeText: 'Sprawdź, na ile Twoja organizacja jest gotowa na wdrożenie sztucznej inteligencji. Odpowiedz na pytania w sześciu obszarach, a otrzymasz wynik i rekomendacje na start.',
+                helpTitle: 'Zanim zaczniesz',
                 helpText: 'Odpowiadaj tak, jak jest, a nie jak powinno być. Wynik zależy od szczerości odpowiedzi. Postęp zapisuje się automatycznie w tej przeglądarce.',
                 savedSurveyFound: 'Znaleziono zapisaną ankietę z',
                 answersCount: 'odpowiedziami.',
@@ -452,7 +453,9 @@
                 statQuestions: 'Pytania',
                 statCategories: 'Obszary',
                 statMinutes: 'Minut',
-                statFormats: 'Formaty eksportu',
+                statQuestionsText: 'Zamknięte pytania z czterema poziomami odpowiedzi.',
+                statCategoriesText: 'Strategia, zasady, dane, ludzie, narzędzia, wdrożenia.',
+                statMinutesText: 'Wynik i rekomendacje od razu po ostatnim pytaniu.',
 
                 part: 'Część',
                 question: 'Pytanie',
@@ -466,21 +469,23 @@
                 announceQuestion: 'Pytanie',
                 announceSelected: 'Wybrano:',
 
-                resultsTitle: 'Wyniki oceny gotowości AI',
+                resultsLabel: 'Wynik ogólny',
                 overallNote: 'Wynik ogólny to średnia ze wszystkich pytań. Wynik obszaru to średnia z pytań w danym obszarze. Najwyższa odpowiedź daje 100%, najniższa 0%.',
-                detailedResults: 'Wyniki szczegółowe',
-                recommendations: 'Rekomendacje',
+                detailedResultsHtml: 'Wyniki <span class="h-pink">szczegółowe</span>',
+                recommendationsHtml: 'Rekomendacje <span class="h-pink">na start</span>',
                 startAgain: 'Rozpocznij ponownie',
                 shareTitle: 'Udostępnij wynik',
                 shareNote: 'Link zawiera Twoje odpowiedzi. Każdy, kto go otworzy, zobaczy ten sam raport.',
                 copyLink: 'Kopiuj link',
-                copied: 'Skopiowano',
+                copied: 'Skopiowano.',
                 copyFailed: 'Nie udało się skopiować, zaznacz link ręcznie.',
                 sharedBanner: 'Oglądasz udostępniony wynik. Nie zapisuje się on w Twojej przeglądarce.',
                 startOwn: 'Zrób własną ocenę',
-                ctaTitle: 'Co dalej?',
+                ctaLabel: 'Co dalej?',
+                ctaTitle: 'Porozmawiajmy o Twoim wyniku',
                 ctaText: 'Wynik pokazuje, gdzie zacząć. Pomagamy organizacjom przejść od samooceny do planu wdrożenia: szkolenia dla kierownictwa i zespołów, polityki użycia AI, wybór pierwszych zastosowań.',
-                ctaButton: 'Porozmawiajmy o Twoim wyniku',
+                ctaButton: 'Napisz do nas',
+                exportLabel: 'Eksport',
 
                 csvSection: 'Obszar',
                 csvQuestion: 'Pytanie',
@@ -493,7 +498,7 @@
                 menuHome: 'Start',
                 menuRestart: 'Od nowa',
                 menuStatus: 'Status',
-                statusTitle: 'Aktualny status',
+                statusTitleHtml: 'Aktualny <span class="h-pink">status</span>',
                 statusSubtitle: 'Postęp w poszczególnych obszarach. Kliknij obszar, aby do niego przejść.',
                 notStarted: 'Nie rozpoczęto',
                 inProgress: 'W trakcie',
@@ -502,7 +507,7 @@
                 startAssessment: 'Rozpocznij',
                 incompleteNote: 'Aby zobaczyć wyniki, odpowiedz na wszystkie pytania.',
                 showResults: 'Pokaż wyniki',
-                restartTitle: 'Zacząć od nowa?',
+                restartTitleHtml: 'Zacząć <span class="h-pink">od nowa?</span>',
                 restartText: 'Wszystkie odpowiedzi zostaną usunięte.',
                 restartConfirm: 'Tak, usuń odpowiedzi',
                 restartCancel: 'Anuluj',
@@ -549,7 +554,11 @@
                 veryLowReadiness: 'Very low readiness',
 
                 title: 'AI readiness assessment',
+                titleHtml: 'AI <em>readiness</em> assessment',
+                heroEyebrow: 'Organisation self-assessment',
+                footerTag: 'AI for organisations',
                 welcomeText: 'Find out how ready your organisation is to adopt artificial intelligence. Answer questions in six areas and get a score with recommendations on where to start.',
+                helpTitle: 'Before you start',
                 helpText: 'Answer as things are, not as they should be. The result is only as honest as the answers. Progress is saved automatically in this browser.',
                 savedSurveyFound: 'Found a saved survey with',
                 answersCount: 'answers.',
@@ -559,7 +568,9 @@
                 statQuestions: 'Questions',
                 statCategories: 'Areas',
                 statMinutes: 'Minutes',
-                statFormats: 'Export formats',
+                statQuestionsText: 'Closed questions with four answer levels.',
+                statCategoriesText: 'Strategy, policies, data, people, tools, deployment.',
+                statMinutesText: 'Score and recommendations right after the last question.',
 
                 part: 'Part',
                 question: 'Question',
@@ -573,21 +584,23 @@
                 announceQuestion: 'Question',
                 announceSelected: 'Selected:',
 
-                resultsTitle: 'AI readiness results',
+                resultsLabel: 'Overall score',
                 overallNote: 'The overall score is the average of all questions. An area score is the average of its questions. The top answer scores 100%, the bottom answer 0%.',
-                detailedResults: 'Detailed results',
-                recommendations: 'Recommendations',
+                detailedResultsHtml: 'Detailed <span class="h-pink">results</span>',
+                recommendationsHtml: 'Where to <span class="h-pink">start</span>',
                 startAgain: 'Start again',
                 shareTitle: 'Share the result',
                 shareNote: 'The link contains your answers. Anyone who opens it sees the same report.',
                 copyLink: 'Copy link',
-                copied: 'Copied',
+                copied: 'Copied.',
                 copyFailed: 'Copy failed, select the link manually.',
                 sharedBanner: 'You are viewing a shared result. It is not saved in your browser.',
                 startOwn: 'Take your own assessment',
-                ctaTitle: 'What next?',
+                ctaLabel: 'What next?',
+                ctaTitle: 'Let\'s talk about your result',
                 ctaText: 'The score shows where to start. We help organisations move from self-assessment to an adoption plan: training for leadership and teams, AI usage policies, selecting the first use cases.',
-                ctaButton: 'Talk to us about your result',
+                ctaButton: 'Write to us',
+                exportLabel: 'Export',
 
                 csvSection: 'Area',
                 csvQuestion: 'Question',
@@ -600,7 +613,7 @@
                 menuHome: 'Home',
                 menuRestart: 'Restart',
                 menuStatus: 'Status',
-                statusTitle: 'Current status',
+                statusTitleHtml: 'Current <span class="h-pink">status</span>',
                 statusSubtitle: 'Progress in each area. Click an area to jump to it.',
                 notStarted: 'Not started',
                 inProgress: 'In progress',
@@ -609,7 +622,7 @@
                 startAssessment: 'Start',
                 incompleteNote: 'Answer all questions to see the results.',
                 showResults: 'Show results',
-                restartTitle: 'Start over?',
+                restartTitleHtml: 'Start <span class="h-pink">over?</span>',
                 restartText: 'All answers will be deleted.',
                 restartConfirm: 'Yes, delete answers',
                 restartCancel: 'Cancel',
@@ -665,13 +678,13 @@
         // ─── DOM refs ───
         const appEl = document.getElementById('app');
         const liveEl = document.getElementById('live');
-        const scrollEl = document.getElementById('scrollProgress');
 
         // ─── Helpers ───
         const t = key => T[state.lang][key] ?? key;
         const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const qid = (s, q) => `${s}-${q}`;
         const icon = (name, cls = 'icon') => `<i data-lucide="${name}" class="${cls}" aria-hidden="true"></i>`;
+        const areaIcon = s => AREA_ICONS[s % AREA_ICONS.length];
         const announce = msg => { liveEl.textContent = ''; setTimeout(() => { liveEl.textContent = msg; }, 50); };
 
         function storageGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
@@ -866,17 +879,82 @@
             }
         }
 
+        // ─── Effects (dots, reveal) ───
+        function initDots(canvas) {
+            const ctx = canvas.getContext('2d');
+            const dots = [];
+            const resize = () => { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; };
+            resize();
+            window.addEventListener('resize', resize);
+            for (let i = 0; i < 70; i++) {
+                dots.push({
+                    x: Math.random(), y: Math.random(),
+                    r: 1 + Math.random() * 2.2,
+                    vx: (Math.random() - 0.5) * 0.0004,
+                    vy: (Math.random() - 0.5) * 0.0004,
+                    o: 0.12 + Math.random() * 0.5
+                });
+            }
+            function frame() {
+                if (!canvas.isConnected) { window.removeEventListener('resize', resize); return; }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                dots.forEach(d => {
+                    d.x = (d.x + d.vx + 1) % 1;
+                    d.y = (d.y + d.vy + 1) % 1;
+                    ctx.beginPath();
+                    ctx.arc(d.x * canvas.width, d.y * canvas.height, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(210, 7, 87, ' + d.o + ')'; // canvas cannot read var(--quantica-pink)
+                    ctx.fill();
+                });
+                if (!REDUCED_MOTION) requestAnimationFrame(frame);
+            }
+            frame();
+        }
+
+        function initReveal(root) {
+            const els = root.querySelectorAll('.reveal:not(.visible)');
+            if (REDUCED_MOTION || !('IntersectionObserver' in window)) {
+                els.forEach(el => el.classList.add('visible'));
+                return;
+            }
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12 });
+            els.forEach(el => observer.observe(el));
+        }
+
         // ─── Render ───
-        function renderSectionNavigator() {
+        const pageHeader = (titleHtml, lead) => `
+            <div class="reveal">
+                <h1 class="h-section">${titleHtml}</h1>
+                ${lead ? `<p class="lead">${escapeHtml(lead)}</p>` : ''}
+            </div>`;
+
+        const progressBlock = (answered, total) => {
+            const progress = (answered / total) * 100;
             return `
-                <nav class="section-navigator" aria-label="${escapeHtml(t('statCategories'))}">
+                <div class="progress-row">
+                    <div class="progress" role="progressbar" aria-valuenow="${Math.round(progress)}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" style="width: ${progress}%"></div>
+                    </div>
+                    <span class="meta">${answered}/${total} ${escapeHtml(t('questionsAnswered'))} · ${Math.round(progress)}% ${escapeHtml(t('completed'))}</span>
+                </div>`;
+        };
+
+        function renderSteps() {
+            return `
+                <nav class="steps" aria-label="${escapeHtml(t('statCategories'))}">
                     ${state.sections.map((section, s) => {
                         const isCurrent = s === state.sectionIdx;
-                        const cls = ['section-indicator'];
-                        if (!isCurrent && sectionProgress(s).isCompleted) cls.push('completed');
+                        const done = !isCurrent && sectionProgress(s).isCompleted;
                         return `
-                            <button class="${cls.join(' ')}" data-action="goToSection" data-section="${s}" ${isCurrent ? 'aria-current="step"' : ''}>
-                                <small>${escapeHtml(t('part'))} ${s + 1}</small>
+                            <button class="step ${done ? 'completed' : ''}" data-action="goToSection" data-section="${s}" ${isCurrent ? 'aria-current="step"' : ''}>
+                                ${done ? icon('check') : `<span>${s + 1}</span>`}
                                 ${escapeHtml(section.name)}
                             </button>`;
                     }).join('')}
@@ -884,45 +962,65 @@
         }
 
         function renderWelcome() {
-            if (state.hasSavedData) {
-                return `
-                    <div class="welcome-screen">
-                        <h1 class="title">${escapeHtml(t('title'))}</h1>
-                        <p class="subtitle">${escapeHtml(t('savedSurveyFound'))} ${answeredCount()} ${escapeHtml(t('answersCount'))} ${escapeHtml(t('continueOrRestart'))}</p>
-                        <div class="button-group">
-                            <button class="button" data-action="continue">${icon('play')} ${escapeHtml(t('continueSurvey'))}</button>
-                            <button class="button secondary" data-action="startFresh">${icon('refresh-cw')} ${escapeHtml(t('startFresh'))}</button>
-                        </div>
-                    </div>`;
-            }
             const total = totalQuestions();
+            const saved = state.hasSavedData;
+            const tagline = saved
+                ? `${t('savedSurveyFound')} ${answeredCount()} ${t('answersCount')} ${t('continueOrRestart')}`
+                : t('welcomeText');
+            const actions = saved
+                ? `<button class="pill pill-solid" data-action="continue">${icon('play')} ${escapeHtml(t('continueSurvey'))}</button>
+                   <button class="pill pill-outline" data-action="startFresh">${icon('refresh-cw')} ${escapeHtml(t('startFresh'))}</button>`
+                : `<button class="pill pill-solid" data-action="start">${icon('arrow-right')} ${escapeHtml(t('startAssessment'))}</button>
+                   <button class="pill pill-outline" data-action="status">${icon('chart-column')} ${escapeHtml(t('menuStatus'))}</button>`;
+            const stats = [
+                ['statQuestions', total, 'statQuestionsText', 'list-checks'],
+                ['statCategories', state.sections.length, 'statCategoriesText', 'layout-grid'],
+                ['statMinutes', `~${Math.ceil(total * MINUTES_PER_QUESTION)}`, 'statMinutesText', 'timer']
+            ];
             return `
-                <div class="welcome-screen">
-                    <h1 class="title">${escapeHtml(t('title'))}</h1>
-                    <p class="subtitle">${escapeHtml(t('welcomeText'))}</p>
-                    <div class="button-group centered">
-                        <button class="button" data-action="start">${icon('arrow-right')} ${escapeHtml(t('startAssessment'))}</button>
+                <header class="hero">
+                    <canvas data-dots aria-hidden="true"></canvas>
+                    <div class="hero-q" aria-hidden="true"><img src="assets/quantica-q-mark-white.png" alt=""></div>
+                    <div class="wrap hero-inner">
+                        <div class="hero-eyebrow">${escapeHtml(t('heroEyebrow'))}</div>
+                        <h1 class="hero-title">${t('titleHtml')}</h1>
+                        <p class="hero-tagline">${escapeHtml(tagline)}</p>
+                        <div class="hero-actions">${actions}</div>
                     </div>
-                    <div class="stats-grid">
-                        <div class="stat-item"><div class="stat-value">${total}</div><div class="stat-label">${escapeHtml(t('statQuestions'))}</div></div>
-                        <div class="stat-item"><div class="stat-value">${state.sections.length}</div><div class="stat-label">${escapeHtml(t('statCategories'))}</div></div>
-                        <div class="stat-item"><div class="stat-value">~${Math.ceil(total * MINUTES_PER_QUESTION)}</div><div class="stat-label">${escapeHtml(t('statMinutes'))}</div></div>
-                        <div class="stat-item"><div class="stat-value">2</div><div class="stat-label">${escapeHtml(t('statFormats'))}</div></div>
+                    <div class="hero-footer wrap"><div>quanticalab.ai</div><div>${escapeHtml(t('title'))}</div></div>
+                </header>
+                <section class="section">
+                    <div class="wrap">
+                        <div class="bento">
+                            ${stats.map(([label, value, text, ic]) => `
+                                <div class="cell cell-2 reveal">
+                                    <div class="cell-tag">${escapeHtml(t(label))}${icon(ic)}</div>
+                                    <div class="stat-value">${value}</div>
+                                    <p class="stat-label">${escapeHtml(t(text))}</p>
+                                </div>`).join('')}
+                            <div class="cell cell-6 start-cell reveal">
+                                <div class="start-text">
+                                    <h3>${escapeHtml(t('helpTitle'))}</h3>
+                                    <p>${escapeHtml(t('helpText'))}</p>
+                                </div>
+                                <button class="pill pill-solid" data-action="${saved ? 'continue' : 'start'}">${escapeHtml(t(saved ? 'continueAssessment' : 'startAssessment'))} ${icon('arrow-right')}</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="help-text">${icon('info', 'icon-sm')} ${escapeHtml(t('helpText'))}</div>
-                </div>`;
+                </section>`;
         }
 
         function renderConfirmRestart() {
             return `
-                <div class="welcome-screen">
-                    <h1 class="title">${escapeHtml(t('restartTitle'))}</h1>
-                    <p class="subtitle">${escapeHtml(t('restartText'))}</p>
-                    <div class="button-group">
-                        <button class="button secondary" data-action="cancelRestart">${icon('arrow-left')} ${escapeHtml(t('restartCancel'))}</button>
-                        <button class="button" data-action="reset" id="confirm-reset">${icon('rotate-ccw')} ${escapeHtml(t('restartConfirm'))}</button>
+                <section class="section section-page">
+                    <div class="wrap wrap-narrow">
+                        ${pageHeader(t('restartTitleHtml'), t('restartText'))}
+                        <div class="pill-row">
+                            <button class="pill pill-ghost" data-action="cancelRestart">${icon('arrow-left')} ${escapeHtml(t('restartCancel'))}</button>
+                            <button class="pill pill-solid" data-action="reset" id="confirm-reset">${icon('rotate-ccw')} ${escapeHtml(t('restartConfirm'))}</button>
+                        </div>
                     </div>
-                </div>`;
+                </section>`;
         }
 
         function renderSurvey() {
@@ -930,148 +1028,180 @@
             const question = section.questions[state.questionIdx];
             const id = qid(state.sectionIdx, state.questionIdx);
             const selected = state.answers[id];
-            const answered = answeredCount();
-            const total = totalQuestions();
-            const progress = (answered / total) * 100;
             const isFirst = state.sectionIdx === 0 && state.questionIdx === 0;
             const isLast = state.sectionIdx === state.sections.length - 1 && state.questionIdx === section.questions.length - 1;
 
             return `
-                ${renderSectionNavigator()}
-                <h2 class="title">${escapeHtml(section.name)}</h2>
-                <div class="progress" role="progressbar" aria-valuenow="${Math.round(progress)}" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: ${progress}%"></div>
-                </div>
-                <div class="meta-line">${answered}/${total} ${escapeHtml(t('questionsAnswered'))} • ${Math.round(progress)}% ${escapeHtml(t('completed'))}</div>
+                <section class="section section-page">
+                    <div class="wrap wrap-narrow">
+                        ${renderSteps()}
+                        <div class="eyebrow">${escapeHtml(t('part'))} ${state.sectionIdx + 1} · ${escapeHtml(section.name)}</div>
+                        ${progressBlock(answeredCount(), totalQuestions())}
 
-                <div class="question" data-question-id="${id}">
-                    <span class="question-number">${escapeHtml(t('question'))} ${state.questionIdx + 1} ${escapeHtml(t('of'))} ${section.questions.length}</span>
-                    <p class="question-text" id="question-text">${escapeHtml(question.text)}</p>
-                    <div role="group" aria-labelledby="question-text">
-                        ${question.options.map((option, idx) => `
-                            <button class="answer-btn" data-action="answer" data-option="${idx}" aria-pressed="${selected === idx}">
-                                <span class="answer-key" aria-hidden="true">${idx + 1}.</span>${escapeHtml(option)}
-                            </button>`).join('')}
+                        <div class="cell cell-6 question-cell question" data-question-id="${id}">
+                            <div class="cell-tag">
+                                <span>${escapeHtml(t('question'))} ${state.questionIdx + 1} ${escapeHtml(t('of'))} ${section.questions.length}</span>
+                                ${icon(areaIcon(state.sectionIdx))}
+                            </div>
+                            <h2 class="question-text" id="question-text">${escapeHtml(question.text)}</h2>
+                            <div class="answers" role="group" aria-labelledby="question-text">
+                                ${question.options.map((option, idx) => `
+                                    <button class="answer-btn" data-action="answer" data-option="${idx}" aria-pressed="${selected === idx}">
+                                        <span class="answer-key" aria-hidden="true">${idx + 1}</span>
+                                        <span class="answer-text">${escapeHtml(option)}</span>
+                                        ${selected === idx ? icon('check', 'icon icon-check') : ''}
+                                    </button>`).join('')}
+                            </div>
+                            <div class="kbd-hint meta">
+                                ${icon('keyboard')}
+                                <span class="kbd">1</span>-<span class="kbd">${maxOptions()}</span> ${escapeHtml(t('quickSelect'))}
+                            </div>
+                        </div>
+
+                        <div class="pill-row between">
+                            <button class="pill pill-ghost" data-action="prev" ${isFirst ? 'disabled' : ''}>${icon('arrow-left')} ${escapeHtml(t('previous'))}</button>
+                            ${isLast && allAnswered()
+                                ? `<button class="pill pill-solid" data-action="results">${icon('chart-column')} ${escapeHtml(t('results'))}</button>`
+                                : `<button class="pill pill-solid" data-action="next">${escapeHtml(t('next'))} ${icon('arrow-right')}</button>`}
+                        </div>
                     </div>
-                </div>
-
-                <div class="button-group">
-                    <button class="button secondary" data-action="prev" ${isFirst ? 'disabled' : ''}>${icon('arrow-left')} ${escapeHtml(t('previous'))}</button>
-                    ${isLast && allAnswered()
-                        ? `<button class="button" data-action="results">${icon('chart-column')} ${escapeHtml(t('results'))}</button>`
-                        : `<button class="button" data-action="next">${escapeHtml(t('next'))} ${icon('arrow-right')}</button>`}
-                </div>
-
-                <div class="help-text">
-                    ${icon('keyboard', 'icon-sm')}
-                    <span class="kbd">1</span>-<span class="kbd">${maxOptions()}</span> ${escapeHtml(t('quickSelect'))}
-                </div>`;
+                </section>`;
         }
 
         function renderStatus() {
             const answered = answeredCount();
-            const total = totalQuestions();
-            const progress = (answered / total) * 100;
             const complete = allAnswered();
             return `
-                <h1 class="title">${escapeHtml(t('statusTitle'))}</h1>
-                <p class="subtitle">${escapeHtml(t('statusSubtitle'))}</p>
-                <div class="progress" role="progressbar" aria-valuenow="${Math.round(progress)}" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: ${progress}%"></div>
-                </div>
-                <div class="meta-line">${answered}/${total} ${escapeHtml(t('questionsAnswered'))} • ${Math.round(progress)}% ${escapeHtml(t('completed'))}</div>
-
-                <div class="results-grid">
-                    ${state.sections.map((section, s) => {
-                        const p = sectionProgress(s);
-                        const status = p.isCompleted
-                            ? `${icon('circle-check', 'icon-sm')}${escapeHtml(t('categoryCompleted'))}`
-                            : p.answered > 0
-                                ? `${icon('clock', 'icon-sm')}${escapeHtml(t('inProgress'))}`
-                                : `${icon('circle', 'icon-sm')}${escapeHtml(t('notStarted'))}`;
-                        return `
-                            <button class="result-card clickable" data-action="goToSection" data-section="${s}">
-                                <div class="result-head">
-                                    <span class="result-name">${escapeHtml(section.name)}</span>
-                                    ${p.isCompleted
-                                        ? `<span class="result-value">${Math.round(sectionScore(s))}%</span>`
-                                        : `<span class="result-small">${p.answered}/${p.total}</span>`}
-                                </div>
-                                <div class="progress"><div class="progress-bar" style="width: ${p.percentage}%"></div></div>
-                                <div class="result-label">${status}</div>
-                            </button>`;
-                    }).join('')}
-                </div>
-
-                ${complete ? '' : `<p class="note">${escapeHtml(t('incompleteNote'))}</p>`}
-                <div class="button-group centered">
-                    ${complete
-                        ? `<button class="button" data-action="results">${icon('chart-column')} ${escapeHtml(t('showResults'))}</button>`
-                        : `<button class="button" data-action="continue">${icon(answered ? 'play' : 'arrow-right')} ${escapeHtml(t(answered ? 'continueAssessment' : 'startAssessment'))}</button>`}
-                </div>`;
+                <section class="section section-page">
+                    <div class="wrap">
+                        ${pageHeader(t('statusTitleHtml'), t('statusSubtitle'))}
+                        ${progressBlock(answered, totalQuestions())}
+                        <div class="bento">
+                            ${state.sections.map((section, s) => {
+                                const p = sectionProgress(s);
+                                const status = p.isCompleted
+                                    ? `${icon('circle-check')} ${escapeHtml(t('categoryCompleted'))}`
+                                    : p.answered > 0
+                                        ? `${icon('clock')} ${escapeHtml(t('inProgress'))}`
+                                        : `${icon('circle')} ${escapeHtml(t('notStarted'))}`;
+                                return `
+                                    <button class="cell cell-3 cell-btn reveal" data-action="goToSection" data-section="${s}">
+                                        <div class="cell-tag"><span>${escapeHtml(t('part'))} ${s + 1}</span>${icon(areaIcon(s))}</div>
+                                        <div class="result-head">
+                                            <h3>${escapeHtml(section.name)}</h3>
+                                            ${p.isCompleted
+                                                ? `<span class="result-value">${Math.round(sectionScore(s))}%</span>`
+                                                : `<span class="meta">${p.answered}/${p.total}</span>`}
+                                        </div>
+                                        <div class="progress"><div class="progress-bar" style="width: ${p.percentage}%"></div></div>
+                                        <div class="meta result-label">${status}</div>
+                                    </button>`;
+                            }).join('')}
+                        </div>
+                        ${complete ? '' : `<p class="note">${escapeHtml(t('incompleteNote'))}</p>`}
+                        <div class="pill-row">
+                            ${complete
+                                ? `<button class="pill pill-solid" data-action="results">${icon('chart-column')} ${escapeHtml(t('showResults'))}</button>`
+                                : `<button class="pill pill-solid" data-action="continue">${icon(answered ? 'play' : 'arrow-right')} ${escapeHtml(t(answered ? 'continueAssessment' : 'startAssessment'))}</button>`}
+                        </div>
+                    </div>
+                </section>`;
         }
 
         function renderResults() {
             const overall = overallScore();
             const shareUrl = encodeShare();
+            const qMark = `<div class="panel-q" aria-hidden="true"><img src="assets/quantica-q-mark-white.png" alt=""></div>`;
             return `
-                ${state.shared ? `<p class="note">${escapeHtml(t('sharedBanner'))}</p>` : ''}
-                <h1 class="title">${escapeHtml(t('resultsTitle'))}</h1>
-                <div class="score" data-overall-score="${Math.round(overall)}">${Math.round(overall)}%</div>
-                <div class="score-label">${escapeHtml(scoreLabel(overall))}</div>
+                <section class="section section-page">
+                    <div class="wrap">
+                        ${state.shared ? `<div class="banner">${escapeHtml(t('sharedBanner'))}</div>` : ''}
+                        <div class="dark-panel reveal">
+                            ${qMark}
+                            <div class="panel-label">${escapeHtml(t('resultsLabel'))}</div>
+                            <div class="score-big" data-overall-score="${Math.round(overall)}">${Math.round(overall)}<em>%</em></div>
+                            <div class="score-band">${escapeHtml(scoreLabel(overall))}</div>
+                            <div class="panel-label">${escapeHtml(t('exportLabel'))}</div>
+                            <div class="pill-row">
+                                <button class="pill pill-solid" data-action="downloadJSON">${icon('file-json')} JSON</button>
+                                <button class="pill pill-outline" data-action="downloadCSV">${icon('file-spreadsheet')} CSV</button>
+                            </div>
+                            <div class="panel-info">
+                                <div class="panel-logo"><img src="assets/quantica-logo-white.png" alt="Quantica Lab"></div>
+                                <div class="panel-meta">${escapeHtml(t('overallNote'))}</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                <div class="download-buttons">
-                    <button class="button" data-action="downloadJSON">${icon('file-json')} JSON</button>
-                    <button class="button secondary" data-action="downloadCSV">${icon('file-spreadsheet')} CSV</button>
-                </div>
+                <section class="section section-alt">
+                    <div class="wrap">
+                        ${pageHeader(t('detailedResultsHtml'))}
+                        <div class="bento">
+                            ${state.sections.map((section, s) => {
+                                const score = sectionScore(s);
+                                return `
+                                    <div class="cell cell-2 reveal" data-section-score="${Math.round(score)}">
+                                        <div class="cell-tag"><span>${escapeHtml(t('part'))} ${s + 1}</span>${icon(areaIcon(s))}</div>
+                                        <div class="result-head">
+                                            <h3>${escapeHtml(section.name)}</h3>
+                                            <span class="result-value">${Math.round(score)}%</span>
+                                        </div>
+                                        <div class="progress"><div class="progress-bar" style="width: ${score}%"></div></div>
+                                        <div class="meta result-label">${escapeHtml(scoreLabel(score))}</div>
+                                    </div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                </section>
 
-                <h3>${escapeHtml(t('detailedResults'))}</h3>
-                <div class="results-grid">
-                    ${state.sections.map((section, s) => {
-                        const score = sectionScore(s);
-                        return `
-                            <div class="result-card" data-section-score="${Math.round(score)}">
-                                <div class="result-head">
-                                    <span class="result-name">${escapeHtml(section.name)}</span>
-                                    <span class="result-value">${Math.round(score)}%</span>
+                <section class="section">
+                    <div class="wrap">
+                        ${pageHeader(t('recommendationsHtml'))}
+                        <div class="bento">
+                            ${state.sections.map((section, s) => {
+                                const score = sectionScore(s);
+                                const band = bandFor(score);
+                                const rec = (T[state.lang].recs[s] || {})[band.rec] || '';
+                                return `
+                                    <div class="cell cell-3 reveal">
+                                        <div class="cell-tag"><span>${Math.round(score)}% · ${escapeHtml(t(band.key))}</span>${icon(areaIcon(s))}</div>
+                                        <h3>${escapeHtml(section.name)}</h3>
+                                        <p>${escapeHtml(rec)}</p>
+                                    </div>`;
+                            }).join('')}
+                            <div class="cell cell-6 reveal">
+                                <div class="cell-tag"><span>${escapeHtml(t('shareTitle'))}</span>${icon('link')}</div>
+                                <div class="share-box">
+                                    <input id="share-link" type="text" readonly value="${escapeHtml(shareUrl)}" aria-label="${escapeHtml(t('shareTitle'))}">
+                                    <button class="pill pill-ghost" data-action="copyLink">${icon('copy')} ${escapeHtml(t('copyLink'))}</button>
                                 </div>
-                                <div class="progress"><div class="progress-bar" style="width: ${score}%"></div></div>
-                                <div class="result-label">${escapeHtml(scoreLabel(score))}</div>
-                            </div>`;
-                    }).join('')}
-                </div>
-                <p class="note">${escapeHtml(t('overallNote'))}</p>
+                                <p class="note"><span id="copy-status"></span> ${escapeHtml(t('shareNote'))}</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-                <h3>${escapeHtml(t('recommendations'))}</h3>
-                ${state.sections.map((section, s) => {
-                    const score = sectionScore(s);
-                    const band = bandFor(score);
-                    const rec = (T[state.lang].recs[s] || {})[band.rec] || '';
-                    return `
-                        <div class="recommendation-card ${band.rec}">
-                            <div class="recommendation-title">${escapeHtml(section.name)} <span class="band">· ${Math.round(score)}%, ${escapeHtml(t(band.key)).toLowerCase()}</span></div>
-                            <div>${escapeHtml(rec)}</div>
-                        </div>`;
-                }).join('')}
-
-                <h3>${escapeHtml(t('shareTitle'))}</h3>
-                <div class="share-box">
-                    <input id="share-link" type="text" readonly value="${escapeHtml(shareUrl)}" aria-label="${escapeHtml(t('shareTitle'))}">
-                    <button class="button secondary" data-action="copyLink">${icon('copy')} ${escapeHtml(t('copyLink'))}</button>
-                </div>
-                <p class="note"><span id="copy-status"></span> ${escapeHtml(t('shareNote'))}</p>
-
-                <div class="cta">
-                    <h3 style="color: inherit; margin-top: 0;">${escapeHtml(t('ctaTitle'))}</h3>
-                    <p>${escapeHtml(t('ctaText'))}</p>
-                    <a class="button" href="${CONTACT_URL}" target="_blank" rel="noopener">${icon('mail')} ${escapeHtml(t('ctaButton'))}</a>
-                </div>
-
-                <div class="button-group centered">
-                    ${state.shared
-                        ? `<button class="button secondary" data-action="startOwn">${icon('arrow-right')} ${escapeHtml(t('startOwn'))}</button>`
-                        : `<button class="button secondary" data-action="restart">${icon('rotate-ccw')} ${escapeHtml(t('startAgain'))}</button>`}
-                </div>`;
+                <section class="section section-alt">
+                    <div class="wrap reveal">
+                        <div class="dark-panel">
+                            ${qMark}
+                            <div class="panel-label">${escapeHtml(t('ctaLabel'))}</div>
+                            <h2>${escapeHtml(t('ctaTitle'))}</h2>
+                            <p>${escapeHtml(t('ctaText'))}</p>
+                            <div class="pill-row">
+                                <a class="pill pill-solid" href="mailto:${CONTACT_EMAIL}">${icon('mail')} ${escapeHtml(t('ctaButton'))}</a>
+                                ${state.shared
+                                    ? `<button class="pill pill-outline" data-action="startOwn">${icon('arrow-right')} ${escapeHtml(t('startOwn'))}</button>`
+                                    : `<button class="pill pill-outline" data-action="restart">${icon('rotate-ccw')} ${escapeHtml(t('startAgain'))}</button>`}
+                            </div>
+                            <div class="panel-info">
+                                <div class="panel-logo"><img src="assets/quantica-logo-white.png" alt="Quantica Lab"></div>
+                                <div class="panel-meta"><strong>Quantica Lab</strong><br><a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a><br><a href="${BRAND_URL}" target="_blank" rel="noopener">quanticalab.ai</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>`;
         }
 
         function render() {
@@ -1081,13 +1211,19 @@
                 survey: renderSurvey,
                 status: renderStatus,
                 results: renderResults,
-                error: () => `<p class="subtitle">${escapeHtml(t('loadError'))}</p>`
+                error: () => `<section class="section section-page"><div class="wrap"><p class="lead">${escapeHtml(t('loadError'))}</p></div></section>`
             };
             appEl.innerHTML = views[state.view]();
             appEl.dataset.view = state.view;
             if (typeof lucide !== 'undefined') lucide.createIcons();
-            document.querySelectorAll('.menu-label').forEach(el => { el.textContent = t(el.dataset.key); });
+            appEl.querySelectorAll('canvas[data-dots]').forEach(initDots);
+            initReveal(appEl);
+            document.querySelectorAll('[data-key]').forEach(el => { el.textContent = t(el.dataset.key); });
             document.querySelectorAll('.lang-btn').forEach(el => el.setAttribute('aria-pressed', String(el.dataset.lang === state.lang)));
+            document.querySelectorAll('.nav-link').forEach(el => {
+                const active = (el.dataset.action === 'home' && state.view === 'welcome') || (el.dataset.action === 'status' && state.view === 'status');
+                if (active) el.setAttribute('aria-current', 'page'); else el.removeAttribute('aria-current');
+            });
             document.documentElement.lang = state.lang;
             document.title = t('title');
             if (state.view === 'survey') {
@@ -1219,12 +1355,6 @@
                 e.preventDefault();
                 answer(parseInt(e.key, 10) - 1);
             }
-        });
-
-        window.addEventListener('scroll', () => {
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = height > 0 ? (window.scrollY / height) * 100 : 0;
-            scrollEl.style.width = scrolled + '%';
         });
 
         // ─── Init ───
